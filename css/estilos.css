@@ -1,0 +1,272 @@
+/* G3 Tec - estilos personalizados sobre Bootstrap 5.3 */
+:root,
+[data-bs-theme="light"] {
+  --g3-neon: #c2410c;
+  --g3-neon-rgb: 194, 65, 12;
+  --g3-cyan: #0e7490;
+  --g3-bg: #f5f6f8;
+  --g3-card: #ffffff;
+  --g3-line: #e3e6eb;
+  --bs-body-bg: var(--g3-bg);
+  --bs-body-color: #0d1015;
+  --bs-secondary-color: #4b5361;
+  --bs-border-color: var(--g3-line);
+  --bs-link-color-rgb: var(--g3-neon-rgb);
+  --bs-link-hover-color-rgb: var(--g3-neon-rgb);
+}
+[data-bs-theme="dark"] {
+  --g3-neon: #ff7a1a;
+  --g3-neon-rgb: 255, 122, 26;
+  --g3-cyan: #22e3ff;
+  --g3-bg: #07080a;
+  --g3-card: #0f1115;
+  --g3-line: #22262e;
+  --bs-body-bg: var(--g3-bg);
+  --bs-body-color: #eef0f4;
+  --bs-secondary-color: #a3abb9;
+  --bs-border-color: var(--g3-line);
+  --bs-tertiary-bg: #15181d;
+}
+body {
+  font-family: "Inter", system-ui, sans-serif;
+}
+h1,
+h2,
+h3,
+.display-5,
+.navbar-brand {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  letter-spacing: -0.02em;
+}
+.text-neon {
+  color: var(--g3-neon) !important;
+}
+.text-cyan {
+  color: var(--g3-cyan) !important;
+}
+.btn-neon {
+  --bs-btn-color: #0d1015;
+  --bs-btn-bg: var(--g3-neon);
+  --bs-btn-border-color: var(--g3-neon);
+  --bs-btn-hover-color: #0d1015;
+  --bs-btn-hover-bg: var(--g3-neon);
+  --bs-btn-hover-border-color: var(--g3-neon);
+  --bs-btn-active-bg: var(--g3-neon);
+  --bs-btn-active-color: #0d1015;
+  font-weight: 600;
+  border-radius: 999px;
+}
+[data-bs-theme="light"] .btn-neon {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+}
+.btn-neon:hover {
+  box-shadow: 0 0 18px rgba(var(--g3-neon-rgb), 0.55);
+}
+.btn-outline-neon {
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-border-color: var(--g3-line);
+  --bs-btn-hover-color: var(--g3-neon);
+  --bs-btn-hover-bg: transparent;
+  --bs-btn-hover-border-color: var(--g3-neon);
+  border-radius: 999px;
+  font-weight: 600;
+}
+.eyebrow {
+  color: var(--g3-neon);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.card,
+.g3-card {
+  background: var(--g3-card);
+  border: 1px solid var(--g3-line);
+  border-radius: 16px;
+}
+.card-hover {
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+}
+.card-hover:hover {
+  border-color: var(--g3-neon);
+  transform: translateY(-2px);
+}
+.topbar {
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--g3-line);
+}
+.site-header {
+  background: var(--g3-bg);
+  border-bottom: 1px solid var(--g3-line);
+}
+.site-header .nav-link {
+  color: var(--bs-secondary-color);
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem !important;
+}
+.site-header .nav-link:hover,
+.site-header .nav-link.active {
+  color: var(--g3-neon);
+  background: rgba(var(--g3-neon-rgb), 0.1);
+}
+.search {
+  max-width: 560px;
+}
+.search .form-control,
+.search .input-group-text {
+  background: var(--g3-card);
+  border-color: var(--g3-line);
+  border-radius: 999px;
+}
+.search .input-group-text {
+  border-right: 0;
+  border-radius: 999px 0 0 999px;
+}
+.search .form-control {
+  border-left: 0;
+  border-radius: 0 999px 999px 0;
+}
+.form-control:focus,
+.form-select:focus,
+.btn:focus-visible,
+a:focus-visible {
+  border-color: var(--g3-neon);
+  box-shadow: 0 0 0 0.2rem rgba(var(--g3-neon-rgb), 0.35);
+  outline: none;
+}
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--g3-line);
+  background:
+    radial-gradient(circle at 75% 50%, rgba(var(--g3-neon-rgb), 0.22), transparent 55%),
+    var(--g3-card);
+}
+.hero h1 span,
+.accent {
+  color: var(--g3-neon);
+}
+.hero-logo {
+  max-width: 260px;
+  filter: drop-shadow(0 0 22px rgba(var(--g3-neon-rgb), 0.45));
+}
+.ico {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(var(--g3-neon-rgb), 0.1);
+  color: var(--g3-neon);
+  font-size: 1.4rem;
+}
+.prod-img {
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  font-size: 3rem;
+  color: var(--g3-neon);
+  background: radial-gradient(circle, rgba(var(--g3-neon-rgb), 0.15), transparent 70%);
+  border-radius: 12px;
+}
+.price {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.wholesale {
+  font-size: 0.8rem;
+  border: 1px dashed var(--g3-line);
+  border-radius: 10px;
+  padding: 0.35rem 0.6rem;
+}
+.badge-neon {
+  background: var(--g3-neon);
+  color: #0d1015;
+}
+[data-bs-theme="light"] .badge-neon {
+  color: #fff;
+}
+.step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--g3-neon);
+  color: var(--g3-neon);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+.table {
+  --bs-table-bg: transparent;
+}
+.site-footer {
+  border-top: 1px solid var(--g3-line);
+  background: var(--g3-card);
+}
+.site-footer a {
+  color: var(--bs-secondary-color);
+  text-decoration: none;
+}
+.site-footer a:hover {
+  color: var(--g3-neon);
+}
+.wa-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--g3-neon);
+  color: #0d1015;
+  font-size: 1.6rem;
+  box-shadow: 0 0 20px rgba(var(--g3-neon-rgb), 0.5);
+  z-index: 1030;
+}
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 2000;
+  background: var(--g3-neon);
+  color: #0d1015;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+.map-ph {
+  min-height: 260px;
+  border-radius: 16px;
+  border: 1px solid var(--g3-line);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--g3-card),
+    var(--g3-card) 12px,
+    var(--bs-tertiary-bg) 12px,
+    var(--bs-tertiary-bg) 24px
+  );
+}
+/* Accesibilidad (Lighthouse): el gris por defecto de Bootstrap (#6c757d) no alcanza contraste 4.5:1 sobre fondos oscuros */
+.text-secondary {
+  color: var(--bs-secondary-color) !important;
+}
