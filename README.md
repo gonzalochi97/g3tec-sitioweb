@@ -15,7 +15,8 @@ El proyecto empezó como una maqueta estática en HTML5 + Bootstrap (TP3). En el
 | ----- | --------- | ----------- |
 | TP2 | Wireframes y mockups en Figma | [Pagina-web](https://github.com/gonzalochi97/Pagina-web) |
 | TP3 | Maqueta estática en HTML5 + Bootstrap | Tag [`v1-html`](https://github.com/gonzalochi97/g3tec-sitioweb/tree/v1-html) y [sitio en GitHub Pages](https://gonzalochi97.github.io/g3tec-sitioweb/) |
-| TP4 | Migración a PHP con includes y `.env` | Rama `main` (este README) |
+| TP4 | Migración a PHP con includes y `.env` | Raíz del repositorio |
+| TP5 | Formularios POST y GET con sanitización | Carpeta [`clase5/`](clase5/) |
 
 La versión HTML no se perdió: quedó guardada en el tag `v1-html` y publicada desde la rama `gh-pages`. En el historial de commits se ve primero el cambio de nombre de cada archivo `.html` a `.php` y después el reemplazo del código repetido por los includes.
 
@@ -126,6 +127,54 @@ Con `APP_ENV=local`, el footer muestra la etiqueta "Entorno local".
 ### Archivo .env.example
 
 ![.env.example](docs/capturas/07-env-example.png)
+
+## Clase 5 – Formularios y seguridad web
+
+Todo el desarrollo de esta entrega está en la carpeta [`clase5/`](clase5/). Es una copia del sitio del TP4 a la que le agregué el procesamiento de formularios en PHP. Se abre en http://localhost/g3tec-sitioweb/clase5/ y usa el mismo `.env` de la raíz.
+
+### Formulario por POST: Contacto (`clase5/contacto.php`)
+
+- Campos: nombre, email y mensaje. El formulario se envía a la misma página con `method="post"`.
+- Cada dato pasa por la función `limpiar()` (`clase5/includes/funciones.php`), que aplica `trim()`, `stripslashes()` y `htmlspecialchars()` antes de usarlo o mostrarlo.
+- Validación en el servidor:
+  - Ningún campo puede llegar vacío (`empty()`, `isset()`).
+  - El nombre debe tener al menos 3 letras y el mensaje al menos 10 caracteres.
+  - El email se valida con `filter_var($email, FILTER_VALIDATE_EMAIL)`.
+- Si hay errores, se muestra un aviso general, cada campo con error queda en rojo con su mensaje y **los datos escritos se conservan**.
+- Si todo está bien, se muestra un mensaje de éxito con el nombre de la persona y el formulario queda vacío.
+
+### Formulario por GET: Búsqueda y filtro del catálogo (`clase5/catalogo.php`)
+
+- Los productos están en un array de PHP y se muestran con `foreach`.
+- El buscador del header y el formulario lateral envían `q` (texto) y `categoria` por GET, por ejemplo `catalogo.php?q=mouse&categoria=Insumos+informáticos`.
+- `q` y `categoria` se limpian con `limpiar()`. La categoría solo se acepta si está en la lista de categorías (`in_array()`). Si no existe, se avisa y se muestran todos los productos.
+- Se informa cuántos productos se encontraron, o se avisa que no hubo resultados. El texto buscado queda escrito en los campos.
+
+### Prueba de XSS
+
+Si en el buscador se escribe `<script>alert('hola')</script>`, el texto aparece en pantalla tal cual y no se ejecuta, porque `htmlspecialchars()` convierte `<` y `>` en `&lt;` y `&gt;`.
+
+### Capturas
+
+**GET: búsqueda por texto**
+
+![Búsqueda GET](clase5/capturas/01-busqueda-get.png)
+
+**GET: filtro por categoría**
+
+![Filtro por categoría](clase5/capturas/02-filtro-categoria.png)
+
+**XSS: el script se muestra como texto**
+
+![Prueba XSS](clase5/capturas/03-xss-sanitizado.png)
+
+**POST: errores de validación con los datos conservados**
+
+![Errores de validación](clase5/capturas/04-contacto-errores.png)
+
+**POST: envío exitoso**
+
+![Envío exitoso](clase5/capturas/05-contacto-enviado.png)
 
 ## Flujo de trabajo con Git
 
