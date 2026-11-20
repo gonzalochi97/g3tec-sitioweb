@@ -1,8 +1,11 @@
 <?php
+
+require_once '../auth/auth_guard.php';
 require_once '../config/conexion.php';
 
 $stmt = $pdo->query("SELECT * FROM productos");
 $productos = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -15,10 +18,23 @@ $productos = $stmt->fetchAll();
 
 <h1>Listado de Productos</h1>
 
-<a href="crear.php">Agregar producto</a>
+
+<p>
+Bienvenido:
+<?= htmlspecialchars($_SESSION['usuario_nombre']) ?>
+</p>
+
+<a href="../auth/logout.php">
+Cerrar sesion
+</a>
 
 <br><br>
 
+<a href="crear.php">
+Agregar producto
+</a>
+
+<br><br>
 <table border="1">
     <tr>
         <th>ID</th>
