@@ -25,7 +25,7 @@ La versión HTML no se perdió: quedó guardada en el tag `v1-html` y publicada 
 - **Diseño en Figma:** https://www.figma.com/design/GMRcCAacl5hp73FwPItskw/Mockup-G3-TEC
 - **Wireframes y mockups:** https://github.com/gonzalochi97/Pagina-web
 - **Versión estática del TP3 (GitHub Pages):** https://gonzalochi97.github.io/g3tec-sitioweb/
-
+- **Pagina G3 Live:** https://sheep-slacked-postnasal.ngrok-free.dev/g3tec-sitioweb/index.php
 ## Tecnologías
 
 - HTML5
