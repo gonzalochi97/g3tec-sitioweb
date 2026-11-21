@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':stock' => $stock
     ]);
 
-    header("Location: index.php");
+    echo "Producto guardado correctamente";
     exit;
 }
 ?>
