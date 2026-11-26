@@ -15,7 +15,8 @@ Después fui sumando lo de cada unidad: formularios con sanitización (TP5), bas
 
 | Etapa | Qué tiene | Dónde verlo |
 | ----- | --------- | ----------- |
-| TP2 | Wireframes y mockups en Figma | [Pagina-web](https://github.com/gonzalochi97/Pagina-web) |
+| TP1 | Tema del sitio, sitios de referencia, wireframes a mano y mapa del sitio | [Pagina-web](https://github.com/gonzalochi97/Pagina-web) (carpetas `TPS` y `Bocetos.Wideframe`) |
+| TP2 | Mockups en Figma (tema oscuro y claro) | [Pagina-web](https://github.com/gonzalochi97/Pagina-web) |
 | TP3 | Maqueta estática en HTML5 + Bootstrap | Tag [`v1-html`](https://github.com/gonzalochi97/g3tec-sitioweb/tree/v1-html) y [sitio en GitHub Pages](https://gonzalochi97.github.io/g3tec-sitioweb/) |
 | TP4 | Migración a PHP con includes y `.env` | Raíz del repositorio |
 | TP5 | Formularios POST y GET con sanitización | Carpeta [`clase5/`](clase5/) |
@@ -26,6 +27,19 @@ Después fui sumando lo de cada unidad: formularios con sanitización (TP5), bas
 | TP10 | Refactorización a MVC y módulo en CodeIgniter 4 | [`app/`](app/), [`mvc_productos.php`](mvc_productos.php) y [`tp10-framework/`](tp10-framework/) |
 
 La versión HTML no se perdió: quedó guardada en el tag `v1-html` y publicada desde la rama `gh-pages`. En el historial de commits se ve primero el cambio de nombre de cada archivo `.html` a `.php` y después el reemplazo del código repetido por los includes.
+
+## TP1 – Diseño preliminar
+
+El primer trabajo fue elegir el tema del sitio y planificarlo antes de diseñarlo. Está en el repositorio [Pagina-web](https://github.com/gonzalochi97/Pagina-web):
+
+- **Tema:** como me dedico al soporte y mantenimiento de equipos, elegí una tienda de electrónica e insumos con venta por menor y por mayor.
+- **Sitios de referencia:** analicé Mercado Libre, Maximus Gaming, Temu, Comodín Online y Black Salta, con tres aspectos positivos y tres negativos de cada uno. De ahí salieron ideas que después usé, como el tema oscuro y claro y la compra mayorista.
+- **Wireframes a mano**, **mapa del sitio** y un **wireframe en Figma** en blanco y negro (carpeta [`Bocetos.Wideframe`](https://github.com/gonzalochi97/Pagina-web/tree/main/Bocetos.Wideframe)).
+- El documento del TP está en [`TPS/`](https://github.com/gonzalochi97/Pagina-web/tree/main/TPS).
+
+| Wireframes a mano | Mapa del sitio | Wireframe en Figma |
+| --- | --- | --- |
+| ![Wireframes a mano](https://github.com/gonzalochi97/Pagina-web/blob/main/Bocetos.Wideframe/Wireframes%20a%20mano.jpeg?raw=true) | ![Mapa del sitio](https://github.com/gonzalochi97/Pagina-web/blob/main/Bocetos.Wideframe/mapadelsitio.jpeg?raw=true) | ![Wireframe en Figma](https://github.com/gonzalochi97/Pagina-web/blob/main/Bocetos.Wideframe/wideframeBN.png?raw=true) |
 
 ## Enlaces
 
