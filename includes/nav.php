@@ -1,6 +1,10 @@
 <?php
 // Menu principal. Marca como activa la pagina que se esta viendo
-$pagina_actual = basename($_SERVER['PHP_SELF']);
+// (solo en las paginas de la raiz, en auth/ y admin/ no se marca ninguna)
+$pagina_actual = '';
+if ($raiz == '') {
+    $pagina_actual = basename($_SERVER['PHP_SELF']);
+}
 
 $menu = [
     'index.php' => 'Inicio',
@@ -30,10 +34,10 @@ $menu = [
               <?php foreach ($menu as $archivo => $texto): ?>
                 <?php if ($archivo == $pagina_actual): ?>
                   <li class="nav-item">
-                    <a class="nav-link active" href="<?= $archivo ?>" aria-current="page"><?= $texto ?></a>
+                    <a class="nav-link active" href="<?= $raiz . $archivo ?>" aria-current="page"><?= $texto ?></a>
                   </li>
                 <?php else: ?>
-                  <li class="nav-item"><a class="nav-link" href="<?= $archivo ?>"><?= $texto ?></a></li>
+                  <li class="nav-item"><a class="nav-link" href="<?= $raiz . $archivo ?>"><?= $texto ?></a></li>
                 <?php endif; ?>
               <?php endforeach; ?>
             </ul>
