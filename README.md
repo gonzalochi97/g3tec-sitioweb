@@ -9,6 +9,8 @@ El proyecto empezó como una maqueta estática en HTML5 + Bootstrap (TP3). En el
 - El título de la pestaña se arma en el servidor con la variable `$titulo_pagina`, y el menú marca con la clase `active` la sección en la que estás.
 - Los datos generales (nombre de la empresa, email, teléfono, WhatsApp y entorno) se leen de un archivo `.env` que no se sube al repositorio.
 
+Después fui sumando lo de cada unidad: formularios con sanitización (TP5), base de datos en MySQL (TP6), un CRUD con PDO (TP7), login con sesiones (TP8), un buscador con Fetch API y JSON (TP9) y, por último, la separación en MVC y una prueba con CodeIgniter 4 (TP10).
+
 ## Evolución del proyecto
 
 | Etapa | Qué tiene | Dónde verlo |
@@ -17,6 +19,11 @@ El proyecto empezó como una maqueta estática en HTML5 + Bootstrap (TP3). En el
 | TP3 | Maqueta estática en HTML5 + Bootstrap | Tag [`v1-html`](https://github.com/gonzalochi97/g3tec-sitioweb/tree/v1-html) y [sitio en GitHub Pages](https://gonzalochi97.github.io/g3tec-sitioweb/) |
 | TP4 | Migración a PHP con includes y `.env` | Raíz del repositorio |
 | TP5 | Formularios POST y GET con sanitización | Carpeta [`clase5/`](clase5/) |
+| TP6 | Modelo de base de datos normalizado y consultas SQL | Carpeta [`tp6/`](tp6/) |
+| TP7 | CRUD de productos con PDO y consultas preparadas | Carpetas [`admin/`](admin/) y [`config/conexion.php`](config/conexion.php) |
+| TP8 | Registro, login y sesiones con `password_hash()` | Carpeta [`auth/`](auth/) |
+| TP9 | Buscador en vivo con Fetch API y respuesta JSON | [`api/`](api/), [`js/buscador.js`](js/buscador.js) y [`admin/busqueda.php`](admin/busqueda.php) |
+| TP10 | Refactorización a MVC y módulo en CodeIgniter 4 | [`app/`](app/), [`mvc_productos.php`](mvc_productos.php) y [`tp10-framework/`](tp10-framework/) |
 
 La versión HTML no se perdió: quedó guardada en el tag `v1-html` y publicada desde la rama `gh-pages`. En el historial de commits se ve primero el cambio de nombre de cada archivo `.html` a `.php` y después el reemplazo del código repetido por los includes.
 
@@ -33,6 +40,9 @@ La versión HTML no se perdió: quedó guardada en el tag `v1-html` y publicada 
 - Bootstrap 5.3 y Bootstrap Icons
 - JavaScript (`js/main.js`)
 - PHP 8.x
+- MySQL (phpMyAdmin) y PDO
+- Fetch API y JSON
+- CodeIgniter 4 y Composer
 - XAMPP (Apache)
 - Git y GitHub
 
@@ -40,8 +50,18 @@ La versión HTML no se perdió: quedó guardada en el tag `v1-html` y publicada 
 
 ```
 g3tec-sitioweb/
+├── admin/               CRUD de productos (TP7) y buscador AJAX (TP9)
+├── api/
+│   └── buscar_productos.php   devuelve los productos en JSON (TP9)
+├── app/                 Modelo, Vista y Controlador de productos (TP10)
+├── auth/                registro, login, logout y auth_guard (TP8)
+├── clase5/              formularios POST y GET (TP5)
+├── tp6/                 schema.sql, consultas.sql y NORMALIZACION.md (TP6)
+├── tp10-framework/      proyecto en CodeIgniter 4 (TP10)
+├── mvc_productos.php    punto de entrada de la versión MVC (TP10)
 ├── config/
-│   └── env.php          lee el .env y define las constantes
+│   ├── env.php          lee el .env y define las constantes
+│   └── conexion.php     conexión a MySQL con PDO (TP7)
 ├── includes/
 │   ├── header.php       <head>, metadatos, CSS y header
 │   ├── nav.php          menú principal con la clase active
@@ -94,6 +114,13 @@ require_once 'includes/header.php';
 4. Abrir en el navegador: http://localhost/g3tec-sitioweb/
 
 Si falta el `.env`, la página muestra un aviso que pide crearlo.
+
+Para las partes que usan base de datos (TP6 a TP10):
+
+5. Iniciar también **MySQL** desde el panel de XAMPP.
+6. En http://localhost/phpmyadmin, ir a **Importar** y cargar primero `tp6/schema.sql` (crea la base `mi_proyecto_web` con sus tablas) y después `tp6/consultas.sql` (carga datos de ejemplo).
+7. Revisar usuario y contraseña de MySQL en `config/conexion.php` (en XAMPP por defecto es `root` sin contraseña).
+8. Crear un usuario en http://localhost/g3tec-sitioweb/auth/registro.php y entrar desde http://localhost/g3tec-sitioweb/auth/login.php.
 
 ## Variables de entorno
 
@@ -176,12 +203,69 @@ Si en el buscador se escribe `<script>alert('hola')</script>`, el texto aparece 
 
 ![Envío exitoso](clase5/capturas/05-contacto-enviado.png)
 
+## TP6 – Base de datos
+
+El diseño de la base está en la carpeta [`tp6/`](tp6/):
+
+- [`NORMALIZACION.md`](tp6/NORMALIZACION.md): parto de una tabla de pedidos sin normalizar (con varios productos en una misma celda) y la llevo paso a paso a 1FN, 2FN y 3FN.
+- [`schema.sql`](tp6/schema.sql): crea la base `mi_proyecto_web` con las tablas `roles`, `usuarios`, `categorias`, `productos`, `pedidos` y `detalle_pedidos`, sus claves foráneas e índices por email y por categoría.
+- [`consultas.sql`](tp6/consultas.sql): ejemplos de `INSERT`, `SELECT` (con `JOIN`), `UPDATE` y `DELETE`.
+
+## TP7 – CRUD con PDO
+
+- [`config/conexion.php`](config/conexion.php) crea la conexión con `PDO`, con errores en modo excepción y `FETCH_ASSOC`.
+- [`admin/index.php`](admin/index.php) lista los productos en una tabla (**Read**).
+- [`admin/crear.php`](admin/crear.php) agrega un producto (**Create**).
+- [`admin/editar.php`](admin/editar.php) modifica un producto (**Update**).
+- [`admin/eliminar.php`](admin/eliminar.php) borra un producto por su id (**Delete**).
+
+Todas las consultas que reciben datos usan `prepare()` y `execute()` con parámetros (`:nombre`, `:id`, etc.), así los valores nunca se pegan directamente en el SQL y se evita la inyección SQL. Lo que se muestra en pantalla pasa por `htmlspecialchars()`.
+
+## TP8 – Sesiones y autenticación
+
+- [`auth/registro.php`](auth/registro.php): revisa que el email no esté registrado y guarda la contraseña con `password_hash()` (nunca en texto plano).
+- [`auth/login.php`](auth/login.php): busca el usuario por email, compara con `password_verify()` y, si es correcto, guarda `usuario_id`, `usuario_nombre` y `rol` en `$_SESSION`. Usa `session_regenerate_id(true)` para cambiar el id de sesión al ingresar.
+- [`auth/auth_guard.php`](auth/auth_guard.php): se incluye al principio de las páginas privadas; si no hay sesión, redirige al login.
+- [`auth/logout.php`](auth/logout.php): vacía `$_SESSION` y llama a `session_destroy()`.
+
+El panel `admin/index.php` está protegido con el guard y muestra el nombre del usuario que inició sesión.
+
+## TP9 – Fetch API y JSON
+
+- [`api/buscar_productos.php`](api/buscar_productos.php) recibe `q` por GET, busca con `LIKE` en una consulta preparada y responde en JSON (`{"status": "success", "data": [...]}`), con código 200 o 500 si falla la base.
+- [`js/buscador.js`](js/buscador.js) escucha el evento `input` del buscador, llama a la API con `fetch()` y `async/await` y arma los resultados sin recargar la página.
+- [`admin/busqueda.php`](admin/busqueda.php) es la página con el buscador.
+
+Se prueba en http://localhost/g3tec-sitioweb/admin/busqueda.php y la respuesta de la API se puede ver directamente en http://localhost/g3tec-sitioweb/api/buscar_productos.php?q=mouse.
+
+## TP10 – MVC y framework
+
+**Refactorización a MVC (PHP puro)**
+
+- **Modelo:** [`app/Models/Producto.php`](app/Models/Producto.php), con el método `obtenerTodos()` que hace la consulta.
+- **Controlador:** [`app/Controllers/ProductoController.php`](app/Controllers/ProductoController.php), que recibe la conexión y le pide los datos al modelo.
+- **Vista:** [`app/Views/productos.php`](app/Views/productos.php), que solo muestra la tabla.
+- [`mvc_productos.php`](mvc_productos.php) junta las tres partes. Se abre en http://localhost/g3tec-sitioweb/mvc_productos.php.
+
+**CodeIgniter 4**
+
+En [`tp10-framework/`](tp10-framework/) está un proyecto de CodeIgniter 4 con el controlador `Productos`, su vista y la ruta `productos` definida en `app/Config/Routes.php`. Para probarlo:
+
+```bash
+cd tp10-framework
+composer install
+php spark serve
+```
+
+y abrir http://localhost:8080/productos.
+
 ## Flujo de trabajo con Git
 
-- Rama `feature/migracion-php-ssi`, creada desde `main`.
-- Tag `v1-html` sobre `main` antes de empezar, para marcar la versión del TP3.
-- Commits separados para la configuración, las plantillas, el renombrado de `.html` a `.php`, el uso de los includes y la documentación.
-- Pull Request de `feature/migracion-php-ssi` a `main`.
+- Tag `v1-html` sobre `main`, para marcar la versión del TP3, que sigue publicada desde la rama `gh-pages`.
+- TP3: rama `feature/maquetacion` y Pull Request #1.
+- TP4: rama `feature/migracion-php-ssi` y Pull Request #2, con commits separados para la configuración, las plantillas, el renombrado de `.html` a `.php`, el uso de los includes y la documentación.
+- TP5: rama `feature/clase5-formularios` y Pull Request #3.
+- TP6 a TP10: commits por cada trabajo práctico, integrados en `main`.
 
 La auditoría de Lighthouse del TP3 está en [LIGHTHOUSE.md](LIGHTHOUSE.md).
 
