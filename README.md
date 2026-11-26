@@ -41,6 +41,28 @@ El primer trabajo fue elegir el tema del sitio y planificarlo antes de diseñarl
 | --- | --- | --- |
 | ![Wireframes a mano](https://github.com/gonzalochi97/Pagina-web/blob/main/Bocetos.Wideframe/Wireframes%20a%20mano.jpeg?raw=true) | ![Mapa del sitio](https://github.com/gonzalochi97/Pagina-web/blob/main/Bocetos.Wideframe/mapadelsitio.jpeg?raw=true) | ![Wireframe en Figma](https://github.com/gonzalochi97/Pagina-web/blob/main/Bocetos.Wideframe/wideframeBN.png?raw=true) |
 
+## TP2 – Mockups en Figma
+
+Con los wireframes del TP1 armé el diseño en Figma: 19 pantallas en escritorio (1440 px), con estilo minimalista, detalles en naranja y cian, y tema oscuro y claro. Todas las pantallas están en el repositorio [Pagina-web](https://github.com/gonzalochi97/Pagina-web) y el diseño se puede abrir en [Figma](https://www.figma.com/design/GMRcCAacl5hp73FwPItskw/Mockup-G3-TEC).
+
+| Inicio (oscuro) | Inicio (claro) |
+| --- | --- |
+| ![Inicio oscuro](https://github.com/gonzalochi97/Pagina-web/blob/main/Figma/pantallas/oscuro/01-inicio.png?raw=true) | ![Inicio claro](https://github.com/gonzalochi97/Pagina-web/blob/main/Figma/pantallas/claro/01-inicio.png?raw=true) |
+
+| Catálogo (oscuro) | Venta mayorista (claro) |
+| --- | --- |
+| ![Catálogo oscuro](https://github.com/gonzalochi97/Pagina-web/blob/main/Figma/pantallas/oscuro/02-catalogo.png?raw=true) | ![Venta mayorista claro](https://github.com/gonzalochi97/Pagina-web/blob/main/Figma/pantallas/claro/08-venta-mayorista.png?raw=true) |
+
+## TP3 – Maqueta en HTML5 y Bootstrap
+
+Pasé el diseño a 10 páginas en HTML5 con Bootstrap 5.3, un CSS propio para los colores y el tema oscuro y claro, y un poco de JavaScript para el cambio de tema (que queda guardado en `localStorage`). El código lo formateé con Prettier y lo revisé con Lighthouse ([LIGHTHOUSE.md](LIGHTHOUSE.md)).
+
+Esta versión quedó guardada en el tag [`v1-html`](https://github.com/gonzalochi97/g3tec-sitioweb/tree/v1-html) y se puede ver en [GitHub Pages](https://gonzalochi97.github.io/g3tec-sitioweb/).
+
+| Tema oscuro | Tema claro |
+| --- | --- |
+| ![Tema oscuro](docs/capturas/tp3-inicio-oscuro.png) | ![Tema claro](docs/capturas/tp3-inicio-claro.png) |
+
 ## Enlaces
 
 - **Diseño en Figma:** https://www.figma.com/design/GMRcCAacl5hp73FwPItskw/Mockup-G3-TEC
@@ -148,7 +170,7 @@ Para las partes que usan base de datos (TP6 a TP10):
 
 Con `APP_ENV=local`, el footer muestra la etiqueta "Entorno local".
 
-## Capturas
+## TP4 – Capturas de la migración a PHP
 
 ### Servidor local funcionando
 
@@ -169,7 +191,7 @@ Con `APP_ENV=local`, el footer muestra la etiqueta "Entorno local".
 
 ![.env.example](docs/capturas/07-env-example.png)
 
-## Clase 5 – Formularios y seguridad web
+## TP5 – Formularios y seguridad web (`clase5/`)
 
 Todo el desarrollo de esta entrega está en la carpeta [`clase5/`](clase5/). Es una copia del sitio del TP4 a la que le agregué el procesamiento de formularios en PHP. Se abre en http://localhost/g3tec-sitioweb/clase5/ y usa el mismo `.env` de la raíz.
 
@@ -225,6 +247,10 @@ El diseño de la base está en la carpeta [`tp6/`](tp6/):
 - [`schema.sql`](tp6/schema.sql): crea la base `mi_proyecto_web` con las tablas `roles`, `usuarios`, `categorias`, `productos`, `pedidos` y `detalle_pedidos`, sus claves foráneas e índices por email y por categoría.
 - [`consultas.sql`](tp6/consultas.sql): ejemplos de `INSERT`, `SELECT` (con `JOIN`), `UPDATE` y `DELETE`.
 
+| Base en phpMyAdmin | Relaciones entre tablas |
+| --- | --- |
+| ![Base en phpMyAdmin](docs/capturas/tp6-phpmyadmin.png) | ![Relaciones entre tablas](docs/capturas/tp6-diagrama.png) |
+
 ## TP7 – CRUD con PDO
 
 - [`config/conexion.php`](config/conexion.php) crea la conexión con `PDO`, con errores en modo excepción y `FETCH_ASSOC`.
@@ -235,6 +261,10 @@ El diseño de la base está en la carpeta [`tp6/`](tp6/):
 
 Todas las consultas que reciben datos usan `prepare()` y `execute()` con parámetros (`:nombre`, `:id`, etc.), así los valores nunca se pegan directamente en el SQL y se evita la inyección SQL. Lo que se muestra en pantalla pasa por `htmlspecialchars()`.
 
+| Listado (Read) | Alta (Create) | Edición (Update) |
+| --- | --- | --- |
+| ![Listado (Read)](docs/capturas/tp7-listado.png) | ![Alta (Create)](docs/capturas/tp7-crear.png) | ![Edición (Update)](docs/capturas/tp7-editar.png) |
+
 ## TP8 – Sesiones y autenticación
 
 - [`auth/registro.php`](auth/registro.php): revisa que el email no esté registrado y guarda la contraseña con `password_hash()` (nunca en texto plano).
@@ -244,6 +274,12 @@ Todas las consultas que reciben datos usan `prepare()` y `execute()` con paráme
 
 El panel `admin/index.php` está protegido con el guard y muestra el nombre del usuario que inició sesión.
 
+| Registro | Login | Acceso sin sesión |
+| --- | --- | --- |
+| ![Registro](docs/capturas/tp8-registro.png) | ![Login](docs/capturas/tp8-login.png) | ![Acceso sin sesión](docs/capturas/tp8-guard.png) |
+
+Al entrar a `admin/` sin haber iniciado sesión, el guard redirige al login con `?error=acceso_denegado`.
+
 ## TP9 – Fetch API y JSON
 
 - [`api/buscar_productos.php`](api/buscar_productos.php) recibe `q` por GET, busca con `LIKE` en una consulta preparada y responde en JSON (`{"status": "success", "data": [...]}`), con código 200 o 500 si falla la base.
@@ -251,6 +287,10 @@ El panel `admin/index.php` está protegido con el guard y muestra el nombre del 
 - [`admin/busqueda.php`](admin/busqueda.php) es la página con el buscador.
 
 Se prueba en http://localhost/g3tec-sitioweb/admin/busqueda.php y la respuesta de la API se puede ver directamente en http://localhost/g3tec-sitioweb/api/buscar_productos.php?q=mouse.
+
+| Buscador en vivo | Respuesta de la API |
+| --- | --- |
+| ![Buscador en vivo](docs/capturas/tp9-busqueda.png) | ![Respuesta de la API](docs/capturas/tp9-api-json.png) |
 
 ## TP10 – MVC y framework
 
@@ -272,6 +312,10 @@ php spark serve
 ```
 
 y abrir http://localhost:8080/productos.
+
+| Versión MVC | CodeIgniter 4 |
+| --- | --- |
+| ![Versión MVC](docs/capturas/tp10-mvc.png) | ![CodeIgniter 4](docs/capturas/tp10-codeigniter.png) |
 
 ## Flujo de trabajo con Git
 
