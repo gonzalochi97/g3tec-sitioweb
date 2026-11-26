@@ -16,8 +16,11 @@ require_once '../includes/header.php';
 ?>
     <main id="contenido" class="container py-4 py-lg-5">
 <?php require_once '../includes/admin_menu.php'; ?>
-      <h1 class="display-6 fw-bold">Productos</h1>
-      <p class="text-secondary">Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>. Hay <?= count($productos) ?> productos cargados.</p>
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h1 class="display-6 fw-bold mb-0">Productos</h1>
+        <a class="btn btn-neon" href="crear.php"><i class="bi bi-plus-lg" aria-hidden="true"></i> Agregar producto</a>
+      </div>
+      <p class="text-secondary mt-2">Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>. Hay <?= count($productos) ?> productos cargados.</p>
 
       <?php if (isset($_GET['ok'])): ?>
         <div class="alert alert-success" role="status">

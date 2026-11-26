@@ -2,9 +2,13 @@
 // Menu de las paginas del panel. Marca la que se esta viendo
 $pagina_admin = basename($_SERVER['PHP_SELF']);
 
+// Agregar y editar son parte de la seccion Productos
+if ($pagina_admin == 'crear.php' || $pagina_admin == 'editar.php') {
+    $pagina_admin = 'index.php';
+}
+
 $menu_admin = [
     'index.php' => 'Productos',
-    'crear.php' => 'Agregar producto',
     'busqueda.php' => 'Buscar',
 ];
 ?>
