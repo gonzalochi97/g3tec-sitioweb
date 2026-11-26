@@ -1,66 +1,61 @@
 <?php
 
-require_once '../auth/auth_guard.php';
+require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
 
-$stmt = $pdo->query("SELECT * FROM productos");
+$sql = "SELECT productos.*, categorias.nombre AS categoria
+        FROM productos
+        LEFT JOIN categorias ON productos.id_categoria = categorias.id_categoria
+        ORDER BY productos.id_producto";
+$stmt = $pdo->query($sql);
 $productos = $stmt->fetchAll();
 
+$raiz = '../';
+$titulo_pagina = 'Panel - Productos';
+require_once '../includes/header.php';
 ?>
+    <main id="contenido" class="container py-4 py-lg-5">
+<?php require_once '../includes/admin_menu.php'; ?>
+      <h1 class="display-6 fw-bold">Productos</h1>
+      <p class="text-secondary">Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>. Hay <?= count($productos) ?> productos cargados.</p>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Productos G3TEC</title>
-</head>
-<body>
+      <?php if (isset($_GET['ok'])): ?>
+        <div class="alert alert-success" role="status">
+          <?php if ($_GET['ok'] == 'creado'): ?>Producto agregado.<?php endif; ?>
+          <?php if ($_GET['ok'] == 'editado'): ?>Cambios guardados.<?php endif; ?>
+          <?php if ($_GET['ok'] == 'eliminado'): ?>Producto eliminado.<?php endif; ?>
+        </div>
+      <?php endif; ?>
 
-<h1>Listado de Productos</h1>
-
-
-<p>
-Bienvenido:
-<?= htmlspecialchars($_SESSION['usuario_nombre']) ?>
-</p>
-
-<a href="../auth/logout.php">
-Cerrar sesion
-</a>
-
-<br><br>
-
-<a href="crear.php">
-Agregar producto
-</a>
-
-<br><br>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Precio</th>
-        <th>Stock</th>
-        <th>Acciones</th>
-
-    </tr>
-
-    <?php foreach ($productos as $producto): ?>
-    <tr>
-    <td><?= htmlspecialchars($producto['id_producto']) ?></td>
-    <td><?= htmlspecialchars($producto['nombre']) ?></td>
-    <td>$<?= htmlspecialchars($producto['precio']) ?></td>
-    <td><?= htmlspecialchars($producto['stock']) ?></td>
-
-    <td>
-        <a href="editar.php?id=<?= $producto['id_producto'] ?>">Editar</a>
-
-        <a href="eliminar.php?id=<?= $producto['id_producto'] ?>">Eliminar</a>
-    </td>
-</tr>
-    <?php endforeach; ?>
-
-</table>
-
-</body>
-</html>
+      <div class="g3-card p-3 table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th class="text-end">Precio</th>
+              <th class="text-end">Stock</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($productos as $producto): ?>
+              <tr>
+                <td><?= htmlspecialchars($producto['id_producto']) ?></td>
+                <td><?= htmlspecialchars($producto['nombre']) ?></td>
+                <td><?= htmlspecialchars($producto['categoria'] ?? '-') ?></td>
+                <td class="text-end">$ <?= number_format($producto['precio'], 0, ',', '.') ?></td>
+                <td class="text-end"><?= htmlspecialchars($producto['stock']) ?></td>
+                <td class="text-end">
+                  <a class="btn btn-sm btn-outline-neon" href="editar.php?id=<?= $producto['id_producto'] ?>">Editar</a>
+                  <a class="btn btn-sm btn-outline-danger" href="eliminar.php?id=<?= $producto['id_producto'] ?>"
+                    onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    </main>
+<?php require_once '../includes/footer.php'; ?>

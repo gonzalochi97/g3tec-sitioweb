@@ -1,24 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php
+require_once '../auth/admin_guard.php';
 
-<head>
-    <meta charset="UTF-8">
-    <title>Buscador AJAX</title>
-</head>
-
-<body>
-
-<h2>Buscar Productos</h2>
-
-<input
-    type="text"
-    id="inputBusqueda"
-    placeholder="Buscar producto..."
->
-
-<div id="resultados"></div>
-
-<script src="../js/buscador.js"></script>
-
-</body>
-</html>
+$raiz = '../';
+$titulo_pagina = 'Panel - Buscar productos';
+require_once '../includes/header.php';
+?>
+    <main id="contenido" class="container py-4 py-lg-5">
+<?php require_once '../includes/admin_menu.php'; ?>
+      <h1 class="display-6 fw-bold">Buscar productos</h1>
+      <p class="text-secondary">Los resultados aparecen mientras escribís (Fetch API + JSON).</p>
+      <div class="col-lg-6 mb-4">
+        <label for="inputBusqueda" class="visually-hidden">Buscar producto</label>
+        <input type="search" class="form-control" id="inputBusqueda" placeholder="Buscar producto..." />
+      </div>
+      <div id="resultados" class="row g-3"></div>
+    </main>
+    <script src="../js/buscador.js"></script>
+<?php require_once '../includes/footer.php'; ?>
