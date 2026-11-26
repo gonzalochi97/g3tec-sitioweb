@@ -17,11 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       datos.data.forEach((producto) => {
         resultados.innerHTML += `
-                    <div>
-                        <h3>${producto.nombre}</h3>
-                        <p>$${producto.precio}</p>
+                    <div class="col-md-4">
+                        <div class="g3-card p-3 h-100">
+                            <h2 class="h6 fw-bold">${producto.nombre}</h2>
+                            <p class="price mb-0">$ ${producto.precio}</p>
+                        </div>
                     </div>
-                    <hr>
                 `;
       });
     } catch (error) {

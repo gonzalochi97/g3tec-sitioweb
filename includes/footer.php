@@ -3,7 +3,7 @@
         <div class="row g-4">
           <div class="col-lg-4">
             <img
-              src="img/logo-sm.webp"
+              src="<?= $raiz ?>img/logo-sm.webp"
               alt="<?= APP_NAME ?>"
               width="77"
               height="64"
@@ -27,28 +27,28 @@
           <div class="col-6 col-lg-2">
             <h2 class="h6 fw-bold">Catálogo</h2>
             <ul class="list-unstyled small d-grid gap-2">
-              <li><a href="catalogo.php">Insumos informáticos</a></li>
-              <li><a href="catalogo.php">Tecnología</a></li>
-              <li><a href="catalogo.php">Electro</a></li>
-              <li><a href="catalogo.php">Cargadores</a></li>
-              <li><a href="catalogo.php">Audio</a></li>
+              <li><a href="<?= $raiz ?>catalogo.php">Insumos informáticos</a></li>
+              <li><a href="<?= $raiz ?>catalogo.php">Tecnología</a></li>
+              <li><a href="<?= $raiz ?>catalogo.php">Electro</a></li>
+              <li><a href="<?= $raiz ?>catalogo.php">Cargadores</a></li>
+              <li><a href="<?= $raiz ?>catalogo.php">Audio</a></li>
             </ul>
           </div>
           <div class="col-6 col-lg-3">
             <h2 class="h6 fw-bold">Servicios</h2>
             <ul class="list-unstyled small d-grid gap-2">
-              <li><a href="mayorista.php">Venta mayorista</a></li>
-              <li><a href="registro.php">Registro mayorista</a></li>
-              <li><a href="soporte.php">Soporte técnico</a></li>
-              <li><a href="reparacion.php">Reparación de PC</a></li>
+              <li><a href="<?= $raiz ?>mayorista.php">Venta mayorista</a></li>
+              <li><a href="<?= $raiz ?>registro.php">Registro mayorista</a></li>
+              <li><a href="<?= $raiz ?>soporte.php">Soporte técnico</a></li>
+              <li><a href="<?= $raiz ?>reparacion.php">Reparación de PC</a></li>
             </ul>
           </div>
           <div class="col-lg-3">
             <h2 class="h6 fw-bold">Empresa</h2>
             <ul class="list-unstyled small d-grid gap-2">
-              <li><a href="nosotros.php">Sobre nosotros</a></li>
-              <li><a href="contacto.php">Contacto / Sucursales</a></li>
-              <li><a href="cuenta.php">Mi cuenta</a></li>
+              <li><a href="<?= $raiz ?>nosotros.php">Sobre nosotros</a></li>
+              <li><a href="<?= $raiz ?>contacto.php">Contacto / Sucursales</a></li>
+              <li><a href="<?= $raiz ?>cuenta.php">Mi cuenta</a></li>
               <li><a href="mailto:<?= APP_EMAIL ?>"><?= APP_EMAIL ?></a></li>
               <li><?= APP_TELEFONO ?></li>
             </ul>
@@ -71,6 +71,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="js/main.js"></script>
+    <script src="<?= $raiz ?>js/main.js"></script>
   </body>
 </html>

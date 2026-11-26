@@ -1,67 +1,63 @@
-<form
-  class="g3-card p-4 row g-3 h-100"
-  method="POST"
-  action="auth/registro.php"
->
-  <h2 class="h4 fw-bold">Crear cuenta</h2>
+<?php
+session_start();
 
-  <div class="col-12">
-    <label for="nombre" class="form-label">Nombre</label>
-    <input
-      type="text"
-      class="form-control"
-      id="nombre"
-      name="nombre"
-      autocomplete="given-name"
-      required
-    />
-  </div>
+// Si no inicio sesion, lo mandamos a ingresar
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: auth/login.php');
+    exit;
+}
 
-  <div class="col-12">
-    <label for="apellido" class="form-label">Apellido</label>
-    <input
-      type="text"
-      class="form-control"
-      id="apellido"
-      name="apellido"
-      autocomplete="family-name"
-      required
-    />
-  </div>
+require_once 'config/conexion.php';
 
-  <div class="col-12">
-    <label for="email" class="form-label">Email</label>
-    <input
-      type="email"
-      class="form-control"
-      id="email"
-      name="email"
-      placeholder="tu@email.com"
-      autocomplete="email"
-      required
-    />
-  </div>
+$sql = "SELECT usuarios.nombre, usuarios.apellido, usuarios.email, roles.nombre AS rol
+        FROM usuarios
+        INNER JOIN roles ON usuarios.id_rol = roles.id_rol
+        WHERE usuarios.id_usuario = :id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':id' => $_SESSION['usuario_id']]);
+$usuario = $stmt->fetch();
 
-  <div class="col-12">
-    <label for="password" class="form-label">Contraseña</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password"
-      name="password"
-      autocomplete="new-password"
-      required
-    />
-  </div>
-
-  <div class="col-12">
-    <button class="btn btn-outline-neon" type="submit">
-      Crear cuenta
-    </button>
-  </div>
-
-  <p class="small text-secondary mb-0">
-    ¿Tenés un comercio?
-    <a href="registro.php">Registrate como mayorista</a>.
-  </p>
-</form>
+$titulo_pagina = "Mi cuenta";
+$descripcion_pagina = "Datos de tu cuenta en G3 Tec.";
+require_once 'includes/header.php';
+?>
+    <main id="contenido" class="container py-4 py-lg-5">
+      <nav aria-label="Ruta de navegación">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Mi cuenta</li>
+        </ol>
+      </nav>
+      <p class="eyebrow mb-2">Usuario</p>
+      <h1 class="display-6 fw-bold">Hola, <?= htmlspecialchars($usuario['nombre']) ?></h1>
+      <?php if (isset($_GET['error']) && $_GET['error'] == 'sin_permiso'): ?>
+        <div class="alert alert-warning" role="alert">Esa sección es solo para administradores.</div>
+      <?php endif; ?>
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="g3-card p-4 h-100">
+            <h2 class="h4 fw-bold">Tus datos</h2>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Nombre</dt>
+              <dd class="col-sm-8"><?= htmlspecialchars($usuario['nombre'] . ' ' . $usuario['apellido']) ?></dd>
+              <dt class="col-sm-4">Email</dt>
+              <dd class="col-sm-8"><?= htmlspecialchars($usuario['email']) ?></dd>
+              <dt class="col-sm-4">Tipo de cuenta</dt>
+              <dd class="col-sm-8"><?= htmlspecialchars($usuario['rol']) ?></dd>
+            </dl>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="g3-card p-4 h-100 d-grid gap-2 align-content-start">
+            <h2 class="h4 fw-bold">Accesos</h2>
+            <?php if ($_SESSION['rol'] == 1): ?>
+              <a class="btn btn-neon" href="admin/index.php">Ir al panel de administrador</a>
+            <?php endif; ?>
+            <a class="btn btn-outline-neon" href="catalogo.php">Ver el catálogo</a>
+            <a class="btn btn-outline-neon" href="carrito.php">Ver mi carrito</a>
+            <a class="btn btn-outline-secondary" href="auth/logout.php">Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </main>
+<?php require_once 'includes/footer.php'; ?>
