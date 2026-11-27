@@ -1,5 +1,6 @@
 <?php
 require_once '../auth/admin_guard.php';
+require_once '../config/conexion.php';
 
 $raiz = '../';
 $titulo_pagina = 'Panel - Buscar productos';

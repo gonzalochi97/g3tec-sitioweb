@@ -173,6 +173,7 @@ Para la tienda completa, después de `tp6/` hay que ejecutar los archivos de la 
 | `pedidos_especiales.sql` | tipo y estado de los pedidos |
 | `seguimiento.sql` | estados de seguimiento de pedidos y reparaciones, y turnos |
 | `mensajes.sql` | mensajes del formulario de contacto |
+| `imagenes.sql` | imagen de cada producto |
 
 ## Funciones de la tienda
 
@@ -181,6 +182,7 @@ Para la tienda completa, después de `tp6/` hay que ejecutar los archivos de la 
 - **Mayoristas:** precio especial desde 10 unidades. El pedido queda pendiente hasta que el administrador lo aprueba y no descuenta stock.
 - **Seguimiento de pedidos:** el administrador cambia el estado en Panel > Pedidos y el cliente ve una barra de avance en Mi cuenta.
 - **Soporte técnico:** consultas de reparación, presupuestos y turnos. Cada orden tiene un número (G3-0001) para seguir su estado en `seguimiento.php` con el email o teléfono.
+- **Imágenes de productos:** se suben desde el panel (JPG, PNG o WEBP de hasta 2 MB) y se guardan en `img/productos/`. Si un producto no tiene, se muestra el ícono de su categoría.
 - **Mensajes:** lo que se escribe en Contacto llega a Panel > Mensajes. Si el cliente tiene cuenta, ve la respuesta en Mi cuenta.
 - **Seguridad:** consultas preparadas con PDO, `htmlspecialchars` en la salida, contraseñas con `password_hash`, token CSRF en todos los formularios POST y control de rol en el panel.
 
