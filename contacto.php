@@ -1,44 +1,29 @@
 <?php
-$titulo_pagina = "Contacto y sucursales";
-$descripcion_pagina = "Contacto, teléfonos y sucursales de G3 Tec en Salta.";
+$titulo_pagina = "Contacto";
+$descripcion_pagina = "Contacto, teléfono y ubicación de G3 Tec en Salta.";
+$direccion = 'San Martín esquina Florida (Ex HR Maluf), Salta';
 require_once 'includes/header.php';
 ?>
     <main id="contenido" class="container py-4 py-lg-5">
       <nav aria-label="Ruta de navegación">
         <ol class="breadcrumb small">
           <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Contacto / Sucursales</li>
+          <li class="breadcrumb-item active" aria-current="page">Contacto</li>
         </ol>
       </nav>
       <p class="eyebrow mb-2">Contacto</p>
-      <h1 class="display-6 fw-bold">Contacto y sucursales</h1>
+      <h1 class="display-6 fw-bold">Contacto</h1>
       <p class="text-secondary lead fs-6 col-lg-8">
-        Escribinos o visitanos en cualquiera de nuestras sucursales de Salta.
+        Escribinos, llamanos o visitanos en nuestro local de Salta.
       </p>
       <div class="row g-4">
-        <div class="col-lg-5 d-grid gap-3">
+        <div class="col-lg-5 d-grid gap-3 align-content-start">
           <div class="g3-card p-3 d-flex gap-3">
             <span class="ico flex-shrink-0"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
             <div>
-              <h2 class="h6 fw-bold mb-1">Casa central</h2>
-              <p class="small mb-0">Av. Belgrano 1234, Salta Capital</p>
+              <h2 class="h6 fw-bold mb-1">Local y depósito</h2>
+              <p class="small mb-0"><?= $direccion ?></p>
               <p class="small text-secondary mb-0">Lun a Vie 9 a 18 h · Sáb 9 a 13 h</p>
-            </div>
-          </div>
-          <div class="g3-card p-3 d-flex gap-3">
-            <span class="ico flex-shrink-0"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
-            <div>
-              <h2 class="h6 fw-bold mb-1">Sucursal Norte</h2>
-              <p class="small mb-0">Av. Bolivia 4500, Salta</p>
-              <p class="small text-secondary mb-0">Lun a Vie 9 a 18 h</p>
-            </div>
-          </div>
-          <div class="g3-card p-3 d-flex gap-3">
-            <span class="ico flex-shrink-0"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
-            <div>
-              <h2 class="h6 fw-bold mb-1">Depósito mayorista</h2>
-              <p class="small mb-0">Parque Industrial, Salta</p>
-              <p class="small text-secondary mb-0">Retiro de pedidos mayoristas</p>
             </div>
           </div>
           <div class="g3-card p-3">
@@ -50,15 +35,24 @@ require_once 'includes/header.php';
               <a href="mailto:<?= APP_EMAIL ?>"><?= APP_EMAIL ?></a>
             </p>
           </div>
+          <div class="g3-card p-3">
+            <h2 class="h6 fw-bold mb-2">Seguinos</h2>
+            <div class="d-flex gap-3 fs-4">
+              <a href="#" aria-label="Instagram de <?= APP_NAME ?>"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+              <a href="#" aria-label="Facebook de <?= APP_NAME ?>"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+              <a href="#" aria-label="TikTok de <?= APP_NAME ?>"><i class="bi bi-tiktok" aria-hidden="true"></i></a>
+            </div>
+          </div>
         </div>
         <div class="col-lg-7">
-          <div
-            class="map-ph d-grid place-items-center mb-3 text-center p-5"
-            role="img"
-            aria-label="Mapa de ejemplo con las sucursales de Salta"
-          >
-            <span class="text-secondary align-self-center">Mapa de sucursales (ejemplo)</span>
-          </div>
+          <iframe
+            class="w-100 rounded-4 border mb-3"
+            height="300"
+            src="https://www.google.com/maps?q=<?= urlencode('San Martín y Florida, Salta, Argentina') ?>&output=embed"
+            title="Mapa: <?= $direccion ?>"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
           <form class="g3-card p-4 row g-3" novalidate data-demo>
             <div class="col-md-6">
               <label for="cnombre" class="form-label">Nombre</label

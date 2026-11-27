@@ -1,4 +1,4 @@
--- Etapa 5: pedidos especiales de mayoristas
+-- Pedidos especiales de mayoristas
 -- Los pedidos de mayoristas quedan pendientes y no descuentan stock
 -- Ejecutar una sola vez (base mi_proyecto_web)
 

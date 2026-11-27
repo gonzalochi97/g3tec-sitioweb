@@ -8,6 +8,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 require_once 'config/conexion.php';
+require_once 'includes/estados.php';
 
 $sql = "SELECT usuarios.nombre, usuarios.apellido, usuarios.email, roles.nombre AS rol
         FROM usuarios
@@ -109,8 +110,11 @@ require_once 'includes/header.php';
                     <td><?= date('d/m/Y H:i', strtotime($pedido['fecha_pedido'])) ?></td>
                     <td class="text-end"><?= $pedido['unidades'] ?></td>
                     <td class="text-end">$ <?= number_format($pedido['total'], 0, ',', '.') ?></td>
-                    <td>
-                      <?= $pedido['tipo'] == 'especial' ? 'Pedido especial · ' : '' ?><?= ucfirst($pedido['estado']) ?>
+                    <td style="min-width: 12rem">
+                      <?php if ($pedido['tipo'] == 'especial'): ?>
+                        <span class="badge badge-neon mb-1">Pedido especial</span>
+                      <?php endif; ?>
+                      <?= barra_estado(pasos_pedido($pedido['tipo']), $pedido['estado']) ?>
                     </td>
                   </tr>
                 <?php endforeach; ?>

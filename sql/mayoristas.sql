@@ -1,4 +1,4 @@
--- Etapa 2: rol Mayorista y solicitudes de cuenta mayorista
+-- Rol Mayorista y solicitudes de cuenta mayorista
 -- Ejecutar una sola vez en phpMyAdmin (base mi_proyecto_web, pestaña SQL)
 
 USE mi_proyecto_web;
