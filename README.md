@@ -68,7 +68,7 @@ Esta versión quedó guardada en el tag [`v1-html`](https://github.com/gonzaloch
 - **Diseño en Figma:** https://www.figma.com/design/GMRcCAacl5hp73FwPItskw/Mockup-G3-TEC
 - **Wireframes y mockups:** https://github.com/gonzalochi97/Pagina-web
 - **Versión estática del TP3 (GitHub Pages):** https://gonzalochi97.github.io/g3tec-sitioweb/
-- **Pagina G3 Live:** https://sheep-slacked-postnasal.ngrok-free.dev/g3tec-sitioweb/index.php
+- **Pagina G3 Live:** https://sheep-slacked-postnasal.ngrok-free.dev/g3tec-sitioweb/index.php o https://g3tec.infy.click/
 ## Tecnologías
 
 - HTML5
