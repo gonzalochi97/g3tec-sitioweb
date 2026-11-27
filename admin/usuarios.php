@@ -1,12 +1,14 @@
 <?php
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 $roles = $pdo->query("SELECT * FROM roles ORDER BY id_rol")->fetchAll();
 $ids_roles = array_column($roles, 'id_rol');
 
 // Cambiar el rol de un usuario
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verificar_csrf();
 
     $id_usuario = $_POST['id_usuario'];
     $id_rol = $_POST['id_rol'];
@@ -85,6 +87,7 @@ require_once '../includes/header.php';
                     <span class="badge text-bg-secondary"><?= htmlspecialchars($usuario['rol']) ?> (vos)</span>
                   <?php else: ?>
                     <form method="POST" class="d-flex gap-2 justify-content-end">
+                      <?= campo_csrf() ?>
                       <input type="hidden" name="id_usuario" value="<?= $usuario['id_usuario'] ?>" />
                       <select class="form-select form-select-sm w-auto" name="id_rol" aria-label="Rol">
                         <?php foreach ($roles as $rol): ?>

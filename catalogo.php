@@ -2,6 +2,7 @@
 session_start();
 
 require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
 require_once 'includes/carrito.php';
 
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nombre")->fetchAll();

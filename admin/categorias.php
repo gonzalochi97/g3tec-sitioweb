@@ -1,11 +1,13 @@
 <?php
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 $error = '';
 $editando = null;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verificar_csrf();
 
     $accion = $_POST['accion'];
     $id_categoria = $_POST['id_categoria'] ?? 0;
@@ -95,6 +97,7 @@ require_once '../includes/header.php';
       <div class="row g-4">
         <div class="col-lg-4">
           <form method="POST" class="g3-card p-4">
+            <?= campo_csrf() ?>
             <h2 class="h5 fw-bold"><?= $editando ? 'Editar categoría' : 'Nueva categoría' ?></h2>
             <?php if ($error): ?>
               <div class="alert alert-danger py-2" role="alert"><?= htmlspecialchars($error) ?></div>
@@ -130,6 +133,7 @@ require_once '../includes/header.php';
                     <td class="text-end">
                       <form method="POST" class="d-flex gap-2 justify-content-end"
                         onsubmit="return confirm('¿Eliminar esta categoría?')">
+                        <?= campo_csrf() ?>
                         <a class="btn btn-sm btn-outline-neon" href="categorias.php?editar=<?= $categoria['id_categoria'] ?>">Editar</a>
                         <input type="hidden" name="id_categoria" value="<?= $categoria['id_categoria'] ?>" />
                         <button class="btn btn-sm btn-outline-danger" name="accion" value="eliminar"

@@ -1,9 +1,11 @@
 <?php
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 // Aprobar o rechazar una solicitud (llega por POST desde los botones de la tabla)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verificar_csrf();
 
     $id_solicitud = $_POST['id_solicitud'];
     $accion = $_POST['accion'];
@@ -79,6 +81,7 @@ require_once '../includes/header.php';
                   <td class="text-end">
                     <?php if ($solicitud['estado'] == 'pendiente'): ?>
                       <form method="POST" class="d-flex gap-2 justify-content-end">
+                        <?= campo_csrf() ?>
                         <input type="hidden" name="id_solicitud" value="<?= $solicitud['id_solicitud'] ?>" />
                         <button class="btn btn-sm btn-outline-success" name="accion" value="aprobar">Aprobar</button>
                         <button class="btn btn-sm btn-outline-danger" name="accion" value="rechazar">Rechazar</button>

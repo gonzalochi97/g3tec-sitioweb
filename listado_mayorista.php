@@ -2,6 +2,7 @@
 session_start();
 
 require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
 require_once 'includes/carrito.php';
 
 // Los precios mayoristas solo se muestran a mayoristas validados y al administrador
@@ -98,6 +99,7 @@ require_once 'includes/header.php';
                   <td class="text-nowrap fw-bold text-neon"><?= pesos(precio_unitario($producto, MINIMO_MAYORISTA)) ?></td>
                   <td colspan="2">
                       <form method="POST" action="carrito.php" class="d-flex gap-2">
+                        <?= campo_csrf() ?>
                         <input type="hidden" name="accion" value="agregar" />
                         <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>" />
                         <input type="hidden" name="pagina" value="listado_mayorista.php" />
