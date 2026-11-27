@@ -9,6 +9,8 @@ if ($pagina_admin == 'crear.php' || $pagina_admin == 'editar.php') {
 
 $menu_admin = [
     'index.php' => 'Productos',
+    'categorias.php' => 'Categorías',
+    'usuarios.php' => 'Usuarios',
     'solicitudes.php' => 'Solicitudes mayoristas',
     'busqueda.php' => 'Buscar',
 ];
