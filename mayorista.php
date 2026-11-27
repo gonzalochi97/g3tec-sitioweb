@@ -39,7 +39,10 @@ require_once 'includes/header.php';
           </div>
         </div>
       </div>
-      <a href="registro.php" class="btn btn-neon mb-5">Registrarme como mayorista</a>
+      <div class="d-flex flex-wrap gap-2 mb-5">
+        <a href="registro.php" class="btn btn-neon">Registrarme como mayorista</a>
+        <a href="listado_mayorista.php" class="btn btn-outline-neon">Ver listado mayorista</a>
+      </div>
       <h2 class="h3 fw-bold">Listado de precios mayoristas</h2>
       <div class="table-responsive g3-card p-2">
         <table class="table align-middle mb-0">

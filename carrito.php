@@ -19,14 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Desde el catalogo: suma 1 (o la cantidad elegida si es mayorista) y vuelve al catalogo
     if ($accion == 'agregar') {
-        $sumar = 1;
-        if (isset($_SESSION['rol']) && $_SESSION['rol'] == 3) {
-            $sumar = max(1, (int) ($_POST['cantidad'] ?? 1));
-        }
-
-        if ($producto && $producto['stock'] > 0) {
+        // El mayorista arma un pedido especial: minimo 10 u y no depende del stock
+        if (es_mayorista() && $producto) {
             $en_carrito = $_SESSION['carrito'][$id] ?? 0;
-            $cantidad = min($en_carrito + $sumar, $producto['stock']);
+            $cantidad = $en_carrito + max(MINIMO_MAYORISTA, (int) ($_POST['cantidad'] ?? 0));
+            $_SESSION['carrito'][$id] = $cantidad;
+            $_SESSION['aviso'] = 'Agregaste ' . $producto['nombre'] . ' al pedido (' . $cantidad . ' en total).';
+        } elseif ($producto && $producto['stock'] > 0) {
+            $en_carrito = $_SESSION['carrito'][$id] ?? 0;
+            $cantidad = min($en_carrito + 1, $producto['stock']);
             $_SESSION['carrito'][$id] = $cantidad;
 
             if ($cantidad == $en_carrito) {
@@ -36,14 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        // Vuelve a la pagina desde donde agrego (catalogo o listado mayorista)
+        $pagina = 'catalogo.php';
+        if (($_POST['pagina'] ?? '') == 'listado_mayorista.php') {
+            $pagina = 'listado_mayorista.php';
+        }
         parse_str($_POST['volver'] ?? '', $filtros);
-        header('Location: catalogo.php?' . http_build_query($filtros) . '#producto-' . $id);
+        header('Location: ' . $pagina . '?' . http_build_query($filtros) . '#producto-' . $id);
         exit;
     }
 
     if ($accion == 'actualizar' && $producto) {
         $cantidad = (int) $_POST['cantidad'];
-        if ($cantidad > 0) {
+        if ($cantidad > 0 && es_mayorista()) {
+            $_SESSION['carrito'][$id] = max($cantidad, MINIMO_MAYORISTA);
+        } elseif ($cantidad > 0) {
             $_SESSION['carrito'][$id] = min($cantidad, $producto['stock']);
         } else {
             unset($_SESSION['carrito'][$id]);
@@ -64,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $items = items_carrito($pdo);
 $total = total_carrito($items);
+$es_mayorista = es_mayorista();
 
 $titulo_pagina = "Tu carrito";
 $descripcion_pagina = "Revisá los productos de tu carrito y finalizá la compra.";
@@ -79,7 +88,11 @@ require_once 'includes/header.php';
       <p class="eyebrow mb-2">Compra</p>
       <h1 class="display-6 fw-bold">Tu carrito</h1>
       <p class="text-secondary lead fs-6 col-lg-8">
-        El precio mayorista se aplica automáticamente desde <?= MINIMO_MAYORISTA ?> unidades del mismo producto.
+        <?php if ($es_mayorista): ?>
+          Pedido especial mayorista: mínimo <?= MINIMO_MAYORISTA ?> unidades por producto. Lo revisamos y te confirmamos.
+        <?php else: ?>
+          El precio mayorista se aplica automáticamente desde <?= MINIMO_MAYORISTA ?> unidades del mismo producto.
+        <?php endif; ?>
       </p>
       <?php if (count($items) == 0): ?>
         <div class="g3-card p-4">
@@ -107,14 +120,16 @@ require_once 'includes/header.php';
                         · oferta
                       <?php endif; ?>
                     </p>
-                    <p class="small text-secondary mb-0">Stock disponible: <?= $producto['stock'] ?> u.</p>
+                    <?php if (!$es_mayorista): ?>
+                      <p class="small text-secondary mb-0">Stock disponible: <?= $producto['stock'] ?> u.</p>
+                    <?php endif; ?>
                   </div>
                   <form method="POST" action="carrito.php" class="d-flex gap-2">
                     <input type="hidden" name="accion" value="actualizar" />
                     <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>" />
                     <label class="visually-hidden" for="cant<?= $producto['id_producto'] ?>">Cantidad de <?= htmlspecialchars($producto['nombre']) ?></label>
                     <input id="cant<?= $producto['id_producto'] ?>" name="cantidad" type="number" min="0"
-                      max="<?= $producto['stock'] ?>" value="<?= $item['cantidad'] ?>"
+                      <?= $es_mayorista ? '' : 'max="' . $producto['stock'] . '"' ?> value="<?= $item['cantidad'] ?>"
                       class="form-control form-control-sm" style="width: 5rem" />
                     <button type="submit" class="btn btn-sm btn-outline-neon" aria-label="Actualizar cantidad">
                       <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
@@ -148,7 +163,7 @@ require_once 'includes/header.php';
                 <dt class="col-7">Total</dt>
                 <dd class="col-5 text-end price"><?= pesos($total) ?></dd>
               </dl>
-              <a href="compra.php" class="btn btn-neon w-100 mt-3">Finalizar compra</a>
+              <a href="compra.php" class="btn btn-neon w-100 mt-3"><?= $es_mayorista ? 'Enviar pedido especial' : 'Finalizar compra' ?></a>
               <a href="catalogo.php" class="btn btn-outline-neon w-100 mt-2">Seguir comprando</a>
             </div>
           </div>

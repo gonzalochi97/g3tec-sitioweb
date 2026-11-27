@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/../config/conexion.php';
+
+$categorias_footer = $pdo->query("SELECT id_categoria, nombre FROM categorias ORDER BY nombre")->fetchAll();
+?>
     <footer class="site-footer pt-5 pb-4 mt-5">
       <div class="container">
         <div class="row g-4">
@@ -27,11 +32,11 @@
           <div class="col-6 col-lg-2">
             <h2 class="h6 fw-bold">Catálogo</h2>
             <ul class="list-unstyled small d-grid gap-2">
-              <li><a href="<?= $raiz ?>catalogo.php">Insumos informáticos</a></li>
-              <li><a href="<?= $raiz ?>catalogo.php">Tecnología</a></li>
-              <li><a href="<?= $raiz ?>catalogo.php">Electro</a></li>
-              <li><a href="<?= $raiz ?>catalogo.php">Cargadores</a></li>
-              <li><a href="<?= $raiz ?>catalogo.php">Audio</a></li>
+              <?php foreach ($categorias_footer as $categoria_footer): ?>
+                <li>
+                  <a href="<?= $raiz ?>catalogo.php?categoria=<?= $categoria_footer['id_categoria'] ?>"><?= htmlspecialchars($categoria_footer['nombre']) ?></a>
+                </li>
+              <?php endforeach; ?>
             </ul>
           </div>
           <div class="col-6 col-lg-3">
@@ -41,6 +46,8 @@
               <li><a href="<?= $raiz ?>registro.php">Registro mayorista</a></li>
               <li><a href="<?= $raiz ?>soporte.php">Soporte técnico</a></li>
               <li><a href="<?= $raiz ?>reparacion.php">Reparación de PC</a></li>
+              <li><a href="<?= $raiz ?>consulta_reparacion.php">Consulta de reparación</a></li>
+              <li><a href="<?= $raiz ?>presupuesto.php">Presupuestos</a></li>
             </ul>
           </div>
           <div class="col-lg-3">
@@ -57,6 +64,7 @@
         <hr class="my-4" />
         <p class="small text-secondary mb-0">
           © <?= date('Y') ?> <?= APP_NAME ?>. Todos los derechos reservados. Contenido de ejemplo.
+          · <a href="<?= $raiz ?>terminos.php">Términos y condiciones</a>
           <?php if (APP_ENV == 'local'): ?>
             <span class="badge text-bg-warning ms-2">Entorno local</span>
           <?php endif; ?>

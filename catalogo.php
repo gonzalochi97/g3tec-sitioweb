@@ -62,7 +62,15 @@ $es_mayorista = isset($_SESSION['rol']) && $_SESSION['rol'] == 3;
 $aviso = $_SESSION['aviso'] ?? '';
 unset($_SESSION['aviso']);
 
-$titulo_pagina = "Catálogo";
+// Nombre de la categoria elegida, para el titulo de la pagina
+$nombre_categoria = '';
+foreach ($categorias as $categoria) {
+    if ($categoria['id_categoria'] == $id_categoria) {
+        $nombre_categoria = $categoria['nombre'];
+    }
+}
+
+$titulo_pagina = $nombre_categoria != '' ? $nombre_categoria : "Catálogo";
 $descripcion_pagina = "Catálogo de insumos informáticos, tecnología, electro, cargadores y audio con precios mayoristas.";
 require_once 'includes/header.php';
 ?>
@@ -70,13 +78,27 @@ require_once 'includes/header.php';
       <nav aria-label="Ruta de navegación">
         <ol class="breadcrumb small">
           <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Catálogo</li>
+          <?php if ($nombre_categoria != ''): ?>
+            <li class="breadcrumb-item"><a href="catalogo.php">Catálogo</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($nombre_categoria) ?></li>
+          <?php elseif ($solo_ofertas): ?>
+            <li class="breadcrumb-item"><a href="catalogo.php">Catálogo</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Ofertas</li>
+          <?php else: ?>
+            <li class="breadcrumb-item active" aria-current="page">Catálogo</li>
+          <?php endif; ?>
         </ol>
       </nav>
       <p class="eyebrow mb-2">Productos</p>
-      <h1 class="display-6 fw-bold">Catálogo de productos</h1>
+      <?php if ($nombre_categoria != ''): ?>
+        <h1 class="display-6 fw-bold"><?= htmlspecialchars($nombre_categoria) ?></h1>
+      <?php elseif ($solo_ofertas): ?>
+        <h1 class="display-6 fw-bold">Ofertas</h1>
+      <?php else: ?>
+        <h1 class="display-6 fw-bold">Catálogo de productos</h1>
+      <?php endif; ?>
       <p class="text-secondary lead fs-6 col-lg-8">
-        Todos nuestros productos con precio por unidad y precio mayorista desde <?= MINIMO_MAYORISTA ?> unidades.
+        Precio por unidad y precio mayorista desde <?= MINIMO_MAYORISTA ?> unidades.
         Valores en pesos argentinos (ARS).
       </p>
 

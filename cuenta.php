@@ -23,7 +23,7 @@ $stmt = $pdo->prepare("SELECT estado FROM solicitudes_mayoristas
 $stmt->execute([':id' => $_SESSION['usuario_id']]);
 $solicitud = $stmt->fetch();
 
-$stmt = $pdo->prepare("SELECT pedidos.id_pedido, pedidos.fecha_pedido, pedidos.total, SUM(detalle_pedidos.cantidad) AS unidades
+$stmt = $pdo->prepare("SELECT pedidos.id_pedido, pedidos.fecha_pedido, pedidos.total, pedidos.tipo, pedidos.estado, SUM(detalle_pedidos.cantidad) AS unidades
                        FROM pedidos
                        INNER JOIN detalle_pedidos ON pedidos.id_pedido = detalle_pedidos.id_pedido
                        WHERE pedidos.id_usuario = :id
@@ -99,6 +99,7 @@ require_once 'includes/header.php';
                   <th>Fecha</th>
                   <th class="text-end">Unidades</th>
                   <th class="text-end">Total</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,6 +109,9 @@ require_once 'includes/header.php';
                     <td><?= date('d/m/Y H:i', strtotime($pedido['fecha_pedido'])) ?></td>
                     <td class="text-end"><?= $pedido['unidades'] ?></td>
                     <td class="text-end">$ <?= number_format($pedido['total'], 0, ',', '.') ?></td>
+                    <td>
+                      <?= $pedido['tipo'] == 'especial' ? 'Pedido especial · ' : '' ?><?= ucfirst($pedido['estado']) ?>
+                    </td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
