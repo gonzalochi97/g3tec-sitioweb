@@ -270,10 +270,13 @@ a:focus-visible {
 .text-secondary {
   color: var(--bs-secondary-color) !important;
 }
-.list-group-item.filtro.active {
+.filtro {
+  background: transparent;
+}
+.filtro-activo {
   color: var(--g3-neon);
   font-weight: 600;
-  border-color: var(--bs-list-group-border-color);
+  background: rgba(var(--g3-neon-rgb), 0.12);
 }
 .filtro-ofertas {
   color: var(--g3-neon);

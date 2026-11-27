@@ -88,17 +88,17 @@ require_once 'includes/header.php';
         <aside class="col-lg-3" aria-label="Filtros">
           <div class="g3-card p-3">
             <h2 class="h6 fw-bold">Categorías</h2>
-            <div class="list-group list-group-flush small">
+            <div class="list-group gap-1 small">
               <a href="catalogo.php"
-                class="list-group-item list-group-item-action bg-transparent filtro <?= $id_categoria == 0 && !$solo_ofertas ? 'active' : '' ?>">Todos</a>
+                class="list-group-item list-group-item-action border-0 rounded filtro <?= $id_categoria == 0 && !$solo_ofertas ? 'filtro-activo' : '' ?>">Todos</a>
               <a href="catalogo.php?ofertas=1"
-                class="list-group-item list-group-item-action bg-transparent filtro filtro-ofertas d-flex justify-content-between align-items-center <?= $solo_ofertas ? 'active' : '' ?>">
+                class="list-group-item list-group-item-action border-0 rounded filtro filtro-ofertas d-flex justify-content-between align-items-center <?= $solo_ofertas ? 'filtro-activo' : '' ?>">
                 <span><i class="bi bi-tag-fill" aria-hidden="true"></i> Ofertas</span>
                 <span class="badge rounded-pill badge-neon"><?= $total_ofertas ?></span>
               </a>
               <?php foreach ($categorias as $categoria): ?>
                 <a href="catalogo.php?categoria=<?= $categoria['id_categoria'] ?>"
-                  class="list-group-item list-group-item-action bg-transparent filtro <?= $categoria['id_categoria'] == $id_categoria ? 'active' : '' ?>">
+                  class="list-group-item list-group-item-action border-0 rounded filtro <?= $categoria['id_categoria'] == $id_categoria ? 'filtro-activo' : '' ?>">
                   <?= htmlspecialchars($categoria['nombre']) ?>
                 </a>
               <?php endforeach; ?>
