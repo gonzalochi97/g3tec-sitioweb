@@ -2,6 +2,7 @@
 session_start();
 
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 $mensaje = '';
 $email = '';
@@ -11,6 +12,7 @@ if (isset($_GET['error']) && $_GET['error'] == 'acceso_denegado') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificar_csrf();
 
     $email = trim($_POST['email']);
     $password = $_POST['password'];
@@ -64,6 +66,7 @@ require_once '../includes/header.php';
       <div class="row g-4">
         <div class="col-lg-6">
           <form class="g3-card p-4 row g-3" method="POST" action="login.php">
+            <?= campo_csrf() ?>
             <?php if ($mensaje != ''): ?>
               <div class="alert alert-danger mb-0" role="alert"><?= htmlspecialchars($mensaje) ?></div>
             <?php endif; ?>

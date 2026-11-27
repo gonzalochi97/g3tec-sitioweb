@@ -1,10 +1,12 @@
 <?php
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 require_once '../includes/carrito.php';
 
 // Aprobar o rechazar un pedido especial. No modifica el stock de la tienda
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verificar_csrf();
     $estado = $_POST['accion'] == 'aprobar' ? 'aprobado' : 'rechazado';
 
     $stmt = $pdo->prepare("UPDATE pedidos SET estado = :estado
@@ -74,6 +76,7 @@ require_once '../includes/header.php';
                   <td class="text-end">
                     <?php if ($pedido['estado'] == 'pendiente'): ?>
                       <form method="POST" class="d-flex gap-2 justify-content-end">
+                        <?= campo_csrf() ?>
                         <input type="hidden" name="id_pedido" value="<?= $pedido['id_pedido'] ?>" />
                         <button class="btn btn-sm btn-outline-success" name="accion" value="aprobar">Aprobar</button>
                         <button class="btn btn-sm btn-outline-danger" name="accion" value="rechazar">Rechazar</button>

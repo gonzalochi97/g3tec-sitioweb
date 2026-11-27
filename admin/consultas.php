@@ -1,9 +1,11 @@
 <?php
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 // Marcar una consulta o un presupuesto como respondido
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verificar_csrf();
     $id = (int) $_POST['id'];
 
     if ($_POST['tipo'] == 'consulta') {
@@ -70,6 +72,7 @@ require_once '../includes/header.php';
                   <td class="text-end">
                     <?php if ($consulta['estado'] == 'pendiente'): ?>
                       <form method="POST">
+                        <?= campo_csrf() ?>
                         <input type="hidden" name="tipo" value="consulta" />
                         <input type="hidden" name="id" value="<?= $consulta['id_consulta'] ?>" />
                         <button class="btn btn-sm btn-outline-success">Marcar respondida</button>
@@ -117,6 +120,7 @@ require_once '../includes/header.php';
                   <td class="text-end">
                     <?php if ($presupuesto['estado'] == 'pendiente'): ?>
                       <form method="POST">
+                        <?= campo_csrf() ?>
                         <input type="hidden" name="tipo" value="presupuesto" />
                         <input type="hidden" name="id" value="<?= $presupuesto['id_presupuesto'] ?>" />
                         <button class="btn btn-sm btn-outline-success">Marcar respondido</button>

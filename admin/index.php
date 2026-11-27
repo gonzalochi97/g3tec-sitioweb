@@ -2,6 +2,7 @@
 
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 $sql = "SELECT productos.*, categorias.nombre AS categoria
         FROM productos
@@ -54,8 +55,12 @@ require_once '../includes/header.php';
                 <td class="text-end"><?= htmlspecialchars($producto['stock']) ?></td>
                 <td class="text-end">
                   <a class="btn btn-sm btn-outline-neon" href="editar.php?id=<?= $producto['id_producto'] ?>">Editar</a>
-                  <a class="btn btn-sm btn-outline-danger" href="eliminar.php?id=<?= $producto['id_producto'] ?>"
-                    onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+                  <form method="POST" action="eliminar.php" class="d-inline"
+                    onsubmit="return confirm('¿Eliminar este producto?')">
+                    <?= campo_csrf() ?>
+                    <input type="hidden" name="id" value="<?= $producto['id_producto'] ?>" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                  </form>
                 </td>
               </tr>
             <?php endforeach; ?>

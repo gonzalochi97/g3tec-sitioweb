@@ -1,6 +1,7 @@
 <?php
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nombre")->fetchAll();
 
@@ -15,6 +16,7 @@ $producto = [
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    verificar_csrf();
 
     $sql = "INSERT INTO productos
             (nombre, descripcion, precio, precio_mayorista, precio_oferta, stock, id_categoria)
@@ -47,6 +49,7 @@ require_once '../includes/header.php';
       <div class="row">
         <div class="col-lg-8">
           <form class="g3-card p-4 row g-3" method="POST">
+            <?= campo_csrf() ?>
 <?php require_once '../includes/form_producto.php'; ?>
             <div class="col-12 d-flex gap-2">
               <button class="btn btn-neon" type="submit">Guardar</button>

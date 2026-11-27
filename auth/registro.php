@@ -1,5 +1,6 @@
 <?php
 require_once '../config/conexion.php';
+require_once '../includes/csrf.php';
 
 $errores = [];
 $nombre = '';
@@ -7,6 +8,7 @@ $apellido = '';
 $email = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificar_csrf();
 
     $nombre = trim($_POST['nombre']);
     $apellido = trim($_POST['apellido']);
@@ -73,6 +75,7 @@ require_once '../includes/header.php';
       <div class="row g-4">
         <div class="col-lg-6">
           <form class="g3-card p-4 row g-3" method="POST" action="registro.php">
+            <?= campo_csrf() ?>
             <?php if (!empty($errores)): ?>
               <div class="alert alert-danger mb-0" role="alert">
                 <?php foreach ($errores as $error): ?>
