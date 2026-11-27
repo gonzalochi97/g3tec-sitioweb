@@ -22,8 +22,8 @@ require_once 'includes/header.php';
             </div>
             <ul class="list-inline mt-4 mb-0">
               <li class="list-inline-item me-4">
-                <strong class="fs-4">+2.500</strong><br /><span class="small text-secondary"
-                  >productos</span
+                <strong class="fs-4">10 u</strong><br /><span class="small text-secondary"
+                  >precio mayorista</span
                 >
               </li>
               <li class="list-inline-item me-4">
@@ -32,8 +32,8 @@ require_once 'includes/header.php';
                 >
               </li>
               <li class="list-inline-item">
-                <strong class="fs-4">+800</strong><br /><span class="small text-secondary"
-                  >comercios</span
+                <strong class="fs-4">Online</strong><br /><span class="small text-secondary"
+                  >seguimiento de reparaciones</span
                 >
               </li>
             </ul>
