@@ -13,14 +13,25 @@ require_once 'includes/carrito.php';
 $error = '';
 $items = items_carrito($pdo);
 $total = total_carrito($items);
+$es_mayorista = es_mayorista();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($items) > 0) {
 
     try {
         $pdo->beginTransaction();
 
-        $stmt = $pdo->prepare("INSERT INTO pedidos (id_usuario, total) VALUES (:usuario, :total)");
-        $stmt->execute([':usuario' => $_SESSION['usuario_id'], ':total' => $total]);
+        // El pedido del mayorista es especial: queda pendiente y no descuenta stock
+        $tipo = $es_mayorista ? 'especial' : 'minorista';
+        $estado = $es_mayorista ? 'pendiente' : 'confirmado';
+
+        $stmt = $pdo->prepare("INSERT INTO pedidos (id_usuario, total, tipo, estado)
+                               VALUES (:usuario, :total, :tipo, :estado)");
+        $stmt->execute([
+            ':usuario' => $_SESSION['usuario_id'],
+            ':total' => $total,
+            ':tipo' => $tipo,
+            ':estado' => $estado,
+        ]);
         $id_pedido = $pdo->lastInsertId();
 
         $detalle = $pdo->prepare("INSERT INTO detalle_pedidos (id_pedido, id_producto, cantidad, precio_unitario)
@@ -33,14 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($items) > 0) {
         foreach ($items as $item) {
             $id_producto = $item['producto']['id_producto'];
 
-            $stock->execute([
-                ':cantidad' => $item['cantidad'],
-                ':cantidad2' => $item['cantidad'],
-                ':producto' => $id_producto,
-            ]);
+            if (!$es_mayorista) {
+                $stock->execute([
+                    ':cantidad' => $item['cantidad'],
+                    ':cantidad2' => $item['cantidad'],
+                    ':producto' => $id_producto,
+                ]);
 
-            if ($stock->rowCount() == 0) {
-                throw new Exception('No hay stock suficiente de ' . $item['producto']['nombre'] . '.');
+                if ($stock->rowCount() == 0) {
+                    throw new Exception('No hay stock suficiente de ' . $item['producto']['nombre'] . '.');
+                }
             }
 
             $detalle->execute([
@@ -80,10 +93,17 @@ require_once 'includes/header.php';
 
       <?php if (isset($_GET['pedido'])): ?>
         <div class="g3-card p-4">
-          <div class="alert alert-success" role="status">
-            ¡Gracias por tu compra! Registramos tu pedido N.º <?= (int) $_GET['pedido'] ?>.
-          </div>
-          <p class="text-secondary">Te vamos a escribir por email para coordinar el pago y el envío.</p>
+          <?php if ($es_mayorista): ?>
+            <div class="alert alert-success" role="status">
+              ¡Recibimos tu pedido especial N.º <?= (int) $_GET['pedido'] ?>!
+            </div>
+            <p class="text-secondary">Lo revisamos y te avisamos cuando esté aprobado. Podés ver el estado en Mi cuenta.</p>
+          <?php else: ?>
+            <div class="alert alert-success" role="status">
+              ¡Gracias por tu compra! Registramos tu pedido N.º <?= (int) $_GET['pedido'] ?>.
+            </div>
+            <p class="text-secondary">Te vamos a escribir por email para coordinar el pago y el envío.</p>
+          <?php endif; ?>
           <a href="cuenta.php" class="btn btn-neon">Ver mis pedidos</a>
           <a href="catalogo.php" class="btn btn-outline-neon">Seguir comprando</a>
         </div>
@@ -126,7 +146,7 @@ require_once 'includes/header.php';
               <h2 class="h5 fw-bold">Total a pagar</h2>
               <p class="price"><?= pesos($total) ?></p>
               <p class="small text-secondary">Comprás como <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>. El envío se coordina después.</p>
-              <button type="submit" class="btn btn-neon w-100">Confirmar pedido</button>
+              <button type="submit" class="btn btn-neon w-100"><?= $es_mayorista ? 'Enviar pedido especial' : 'Confirmar pedido' ?></button>
               <a href="carrito.php" class="btn btn-outline-neon w-100 mt-2">Volver al carrito</a>
             </form>
           </div>

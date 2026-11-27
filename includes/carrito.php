@@ -44,6 +44,11 @@ function icono_categoria($categoria)
 }
 
 // Devuelve los productos del carrito con su precio y subtotal (leidos de la base)
+function es_mayorista()
+{
+    return isset($_SESSION['rol']) && $_SESSION['rol'] == 3;
+}
+
 function items_carrito($pdo)
 {
     $items = [];
