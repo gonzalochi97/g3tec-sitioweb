@@ -1,4 +1,54 @@
 <?php
+session_start();
+
+require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
+
+$errores = [];
+$enviado = isset($_GET['enviado']);
+$datos = ['nombre' => '', 'email' => '', 'mensaje' => ''];
+
+// Si tiene sesion iniciada, completamos su nombre y email
+if (isset($_SESSION['usuario_id'])) {
+    $stmt = $pdo->prepare("SELECT nombre, apellido, email FROM usuarios WHERE id_usuario = :id");
+    $stmt->execute([':id' => $_SESSION['usuario_id']]);
+    $usuario = $stmt->fetch();
+    $datos['nombre'] = $usuario['nombre'] . ' ' . $usuario['apellido'];
+    $datos['email'] = $usuario['email'];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificar_csrf();
+
+    foreach ($datos as $campo => $valor) {
+        $datos[$campo] = trim($_POST[$campo] ?? '');
+    }
+
+    if (strlen($datos['nombre']) < 3) {
+        $errores[] = 'Ingresá tu nombre.';
+    }
+    if (!filter_var($datos['email'], FILTER_VALIDATE_EMAIL)) {
+        $errores[] = 'Ingresá un email válido.';
+    }
+    if (strlen($datos['mensaje']) < 10) {
+        $errores[] = 'El mensaje tiene que tener al menos 10 caracteres.';
+    }
+
+    if (empty($errores)) {
+        $stmt = $pdo->prepare("INSERT INTO mensajes (id_usuario, nombre, email, mensaje)
+                               VALUES (:usuario, :nombre, :email, :mensaje)");
+        $stmt->execute([
+            ':usuario' => $_SESSION['usuario_id'] ?? null,
+            ':nombre' => $datos['nombre'],
+            ':email' => $datos['email'],
+            ':mensaje' => $datos['mensaje'],
+        ]);
+
+        header('Location: contacto.php?enviado=1#mensaje');
+        exit;
+    }
+}
+
 $titulo_pagina = "Contacto";
 $descripcion_pagina = "Contacto, teléfono y ubicación de G3 Tec en Salta.";
 $direccion = 'San Martín esquina Florida (Ex HR Maluf), Salta';
@@ -53,42 +103,47 @@ require_once 'includes/header.php';
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
-          <form class="g3-card p-4 row g-3" novalidate data-demo>
+          <?php if ($enviado): ?>
+            <div id="mensaje" class="g3-card p-4">
+              <h2 class="h5 fw-bold">¡Mensaje enviado!</h2>
+              <p class="mb-0">
+                Te respondemos a la brevedad.
+                <?php if (isset($_SESSION['usuario_id'])): ?>
+                  Vas a ver la respuesta en <a href="cuenta.php">Mi cuenta</a>.
+                <?php else: ?>
+                  Te llega la respuesta por email.
+                <?php endif; ?>
+              </p>
+            </div>
+          <?php else: ?>
+          <form id="mensaje" class="g3-card p-4 row g-3" method="POST" action="contacto.php#mensaje">
+            <?= campo_csrf() ?>
+            <?php if (!empty($errores)): ?>
+              <div class="alert alert-danger mb-0" role="alert">
+                <?php foreach ($errores as $error): ?>
+                  <div><?= htmlspecialchars($error) ?></div>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
             <div class="col-md-6">
-              <label for="cnombre" class="form-label">Nombre</label
-              ><input
-                type="text"
-                class="form-control"
-                id="cnombre"
-                name="cnombre"
-                placeholder="Juan Pérez"
-                autocomplete="name"
-                required
-              />
+              <label for="cnombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="cnombre" name="nombre" placeholder="Juan Pérez"
+                autocomplete="name" value="<?= htmlspecialchars($datos['nombre']) ?>" required />
             </div>
             <div class="col-md-6">
-              <label for="cemail" class="form-label">Email</label
-              ><input
-                type="email"
-                class="form-control"
-                id="cemail"
-                name="cemail"
-                placeholder="tu@email.com"
-                autocomplete="email"
-                required
-              />
+              <label for="cemail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="cemail" name="email" placeholder="tu@email.com"
+                autocomplete="email" value="<?= htmlspecialchars($datos['email']) ?>" required />
             </div>
             <div class="col-12">
-              <label for="cmensaje" class="form-label">Mensaje</label
-              ><textarea class="form-control" id="cmensaje" rows="3" required></textarea>
+              <label for="cmensaje" class="form-label">Mensaje</label>
+              <textarea class="form-control" id="cmensaje" name="mensaje" rows="4" required><?= htmlspecialchars($datos['mensaje']) ?></textarea>
             </div>
             <div class="col-12">
               <button class="btn btn-neon" type="submit">Enviar mensaje</button>
-              <div class="alert alert-success d-none mt-3" role="status" data-ok>
-                ¡Mensaje enviado!
-              </div>
             </div>
           </form>
+          <?php endif; ?>
         </div>
       </div>
     </main>

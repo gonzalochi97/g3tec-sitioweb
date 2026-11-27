@@ -33,6 +33,10 @@ $stmt = $pdo->prepare("SELECT pedidos.id_pedido, pedidos.fecha_pedido, pedidos.t
 $stmt->execute([':id' => $_SESSION['usuario_id']]);
 $pedidos = $stmt->fetchAll();
 
+$stmt = $pdo->prepare("SELECT * FROM mensajes WHERE id_usuario = :id ORDER BY created_at DESC");
+$stmt->execute([':id' => $_SESSION['usuario_id']]);
+$mensajes = $stmt->fetchAll();
+
 $titulo_pagina = "Mi cuenta";
 $descripcion_pagina = "Datos de tu cuenta en G3 Tec.";
 require_once 'includes/header.php';
@@ -120,6 +124,32 @@ require_once 'includes/header.php';
                 <?php endforeach; ?>
               </tbody>
             </table>
+          </div>
+        <?php endif; ?>
+      </div>
+      <div class="g3-card p-4 mt-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+          <h2 class="h4 fw-bold mb-0">Mis mensajes</h2>
+          <a class="btn btn-sm btn-outline-neon" href="contacto.php#mensaje">Nuevo mensaje</a>
+        </div>
+        <?php if (count($mensajes) == 0): ?>
+          <p class="text-secondary mb-0">Todavía no nos escribiste.</p>
+        <?php else: ?>
+          <div class="d-grid gap-3">
+            <?php foreach ($mensajes as $mensaje): ?>
+              <div class="border rounded-3 p-3">
+                <p class="small text-secondary mb-1">Vos · <?= date('d/m/Y H:i', strtotime($mensaje['created_at'])) ?></p>
+                <p class="mb-2"><?= nl2br(htmlspecialchars($mensaje['mensaje'])) ?></p>
+                <?php if ($mensaje['respuesta']): ?>
+                  <div class="border-start border-3 ps-3" style="border-color: var(--g3-neon) !important">
+                    <p class="small text-secondary mb-1">G3 Tec · <?= date('d/m/Y H:i', strtotime($mensaje['respondido_at'])) ?></p>
+                    <p class="mb-0"><?= nl2br(htmlspecialchars($mensaje['respuesta'])) ?></p>
+                  </div>
+                <?php else: ?>
+                  <span class="badge text-bg-secondary">Esperando respuesta</span>
+                <?php endif; ?>
+              </div>
+            <?php endforeach; ?>
           </div>
         <?php endif; ?>
       </div>
