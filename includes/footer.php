@@ -24,8 +24,8 @@ $categorias_footer = $pdo->query("SELECT id_categoria, nombre FROM categorias OR
                 ><i class="bi bi-instagram" aria-hidden="true"></i></a
               ><a href="#" aria-label="Facebook de <?= APP_NAME ?>"
                 ><i class="bi bi-facebook" aria-hidden="true"></i></a
-              ><a href="#" aria-label="YouTube de <?= APP_NAME ?>"
-                ><i class="bi bi-youtube" aria-hidden="true"></i
+              ><a href="#" aria-label="TikTok de <?= APP_NAME ?>"
+                ><i class="bi bi-tiktok" aria-hidden="true"></i
               ></a>
             </div>
           </div>
@@ -54,7 +54,7 @@ $categorias_footer = $pdo->query("SELECT id_categoria, nombre FROM categorias OR
             <h2 class="h6 fw-bold">Empresa</h2>
             <ul class="list-unstyled small d-grid gap-2">
               <li><a href="<?= $raiz ?>nosotros.php">Sobre nosotros</a></li>
-              <li><a href="<?= $raiz ?>contacto.php">Contacto / Sucursales</a></li>
+              <li><a href="<?= $raiz ?>contacto.php">Contacto</a></li>
               <li><a href="<?= $raiz ?>cuenta.php">Mi cuenta</a></li>
               <li><a href="mailto:<?= APP_EMAIL ?>"><?= APP_EMAIL ?></a></li>
               <li><?= APP_TELEFONO ?></li>
