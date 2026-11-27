@@ -61,7 +61,7 @@ Esta versión quedó guardada en el tag [`v1-html`](https://github.com/gonzaloch
 
 | Tema oscuro | Tema claro |
 | --- | --- |
-| ![Tema oscuro](https://app.devin.ai/attachments/f0131d95-5a1f-487a-adc9-3f10e3178f1d/tp3-inicio-oscuro.png#w=1280&h=930) | ![Tema claro](https://app.devin.ai/attachments/f29b432a-7739-4827-8b69-317f800ec1ac/tp3-inicio-claro.png#w=1280&h=930) |
+| ![Tema oscuro](docs/capturas/tp3-inicio-oscuro.png) | ![Tema claro](docs/capturas/tp3-inicio-claro.png) |
 
 ## Enlaces
 
@@ -200,22 +200,22 @@ Con `APP_ENV=local`, el footer muestra la etiqueta "Entorno local".
 
 ### Servidor local funcionando
 
-![Sitio en localhost](https://app.devin.ai/attachments/1bf6f7f9-b624-41de-8aed-a558da482400/01-servidor-local.png#w=1902&h=1051)
+![Sitio en localhost](docs/capturas/01-servidor-local.png)
 
 ### Estructura modular (SSI)
 
-![header.php](https://app.devin.ai/attachments/49591c89-e6cf-4455-9666-27c29457dd85/02-header-php.png#w=1905&h=1056)
-![nav.php](https://app.devin.ai/attachments/aba0773a-d865-46ca-ab19-12fab799e835/03-nav-php.png#w=1916&h=1051)
-![footer.php](https://app.devin.ai/attachments/a09b8780-bfcf-484a-b030-2f7bbf20a4bf/04-footer-php.png#w=1918&h=1051)
+![header.php](docs/capturas/02-header-php.png)
+![nav.php](docs/capturas/03-nav-php.png)
+![footer.php](docs/capturas/04-footer-php.png)
 
 ### Título dinámico y menú activo
 
-![Catálogo](https://app.devin.ai/attachments/09786013-cc08-4513-8a33-ab82fb3ecf76/05-titulo-catalogo.png#w=1919&h=1051)
-![Contacto](https://app.devin.ai/attachments/93a53214-6368-481a-a61a-ee1d848cd8ef/06-titulo-contacto.png#w=1900&h=1042)
+![Catálogo](docs/capturas/05-titulo-catalogo.png)
+![Contacto](docs/capturas/06-titulo-contacto.png)
 
 ### Archivo .env.example
 
-![.env.example](https://app.devin.ai/attachments/678b2925-3679-43c5-9358-f25e9e02c6c5/07-env-example.png#w=1919&h=1050)
+![.env.example](docs/capturas/07-env-example.png)
 
 ## TP5 – Formularios y seguridad web (`clase5/`)
 
@@ -247,23 +247,23 @@ Si en el buscador se escribe `<script>alert('hola')</script>`, el texto aparece 
 
 **GET: búsqueda por texto**
 
-![Búsqueda GET](https://app.devin.ai/attachments/7e1c4bc9-c99c-4bac-9bd1-74fdbbc40e20/01-busqueda-get.png#w=1901&h=1014)
+![Búsqueda GET](clase5/capturas/01-busqueda-get.png)
 
 **GET: filtro por categoría**
 
-![Filtro por categoría](https://app.devin.ai/attachments/689eb80e-2dfb-4f9a-a8e8-f832e1829a97/02-filtro-categoria.png#w=1888&h=1003)
+![Filtro por categoría](clase5/capturas/02-filtro-categoria.png)
 
 **XSS: el script se muestra como texto**
 
-![Prueba XSS](https://app.devin.ai/attachments/ef4486c2-1ded-495d-9bba-962e5345a8fd/03-xss-sanitizado.png#w=1896&h=1024)
+![Prueba XSS](clase5/capturas/03-xss-sanitizado.png)
 
 **POST: errores de validación con los datos conservados**
 
-![Errores de validación](https://app.devin.ai/attachments/bea93d4e-5c1d-4ed1-9d84-e6296b4785f5/04-contacto-errores.png#w=1904&h=923)
+![Errores de validación](clase5/capturas/04-contacto-errores.png)
 
 **POST: envío exitoso**
 
-![Envío exitoso](https://app.devin.ai/attachments/4fcaa3cd-d8c6-4370-9505-deecf9b4e286/05-contacto-enviado.png#w=1780&h=964)
+![Envío exitoso](clase5/capturas/05-contacto-enviado.png)
 
 ## TP6 – Base de datos
 
@@ -275,7 +275,7 @@ El diseño de la base está en la carpeta [`tp6/`](tp6/):
 
 | Base en phpMyAdmin | Relaciones entre tablas |
 | --- | --- |
-| ![Base en phpMyAdmin](https://app.devin.ai/attachments/326dfcb3-a507-464b-bdf7-6a50790a81c7/tp6-phpmyadmin.png#w=1280&h=930) | ![Relaciones entre tablas](https://app.devin.ai/attachments/f1dd9b51-cc11-445f-9626-1c2502e87cbd/tp6-diagrama.png#w=1280&h=930) |
+| ![Base en phpMyAdmin](docs/capturas/tp6-phpmyadmin.png) | ![Relaciones entre tablas](docs/capturas/tp6-diagrama.png) |
 
 ## TP7 – CRUD con PDO
 
@@ -289,7 +289,7 @@ Todas las consultas que reciben datos usan `prepare()` y `execute()` con paráme
 
 | Listado (Read) | Alta (Create) | Edición (Update) |
 | --- | --- | --- |
-| ![Listado (Read)](https://app.devin.ai/attachments/94504bdd-b812-4530-a30d-08a75dd71db2/tp7-listado.png#w=1280&h=930) | ![Alta (Create)](https://app.devin.ai/attachments/0f323f02-f91e-4c3e-bc93-4cf47dee9689/tp7-crear.png#w=1280&h=930) | ![Edición (Update)](https://app.devin.ai/attachments/3d424a42-8bea-428f-bcef-10bd10431656/tp7-editar.png#w=1280&h=930) |
+| ![Listado (Read)](docs/capturas/tp7-listado.png) | ![Alta (Create)](docs/capturas/tp7-crear.png) | ![Edición (Update)](docs/capturas/tp7-editar.png) |
 
 ## TP8 – Sesiones y autenticación
 
@@ -302,7 +302,7 @@ El panel `admin/index.php` está protegido con el guard y muestra el nombre del 
 
 | Registro | Login | Acceso sin sesión |
 | --- | --- | --- |
-| ![Registro](https://app.devin.ai/attachments/b40ca773-fb42-4d5e-89c0-56658597e525/tp8-registro.png#w=1280&h=930) | ![Login](https://app.devin.ai/attachments/b29d7eda-3790-4a56-9a0a-eef3268f26bb/tp8-login.png#w=1280&h=930) | ![Acceso sin sesión](https://app.devin.ai/attachments/005c08f1-1dbe-44fd-aec7-a559673bbd4b/tp8-guard.png#w=1280&h=930) |
+| ![Registro](docs/capturas/tp8-registro.png) | ![Login](docs/capturas/tp8-login.png) | ![Acceso sin sesión](docs/capturas/tp8-guard.png) |
 
 Al entrar a `admin/` sin haber iniciado sesión, el guard redirige al login con `?error=acceso_denegado`.
 
@@ -316,7 +316,7 @@ Se prueba en http://localhost/g3tec-sitioweb/admin/busqueda.php y la respuesta d
 
 | Buscador en vivo | Respuesta de la API |
 | --- | --- |
-| ![Buscador en vivo](https://app.devin.ai/attachments/8ac36d12-5653-46eb-802e-719427bfbfae/tp9-busqueda.png#w=1280&h=930) | ![Respuesta de la API](https://app.devin.ai/attachments/936b6607-5836-4deb-9b96-0d4b7224e66b/tp9-api-json.png#w=1280&h=930) |
+| ![Buscador en vivo](docs/capturas/tp9-busqueda.png) | ![Respuesta de la API](docs/capturas/tp9-api-json.png) |
 
 ## TP10 – MVC y framework
 
@@ -341,7 +341,7 @@ y abrir http://localhost:8080/productos.
 
 | Versión MVC | CodeIgniter 4 |
 | --- | --- |
-| ![Versión MVC](https://app.devin.ai/attachments/0eeaeab2-6aac-4d9f-897c-aacaf68badb6/tp10-mvc.png#w=1280&h=930) | ![CodeIgniter 4](https://app.devin.ai/attachments/0f6fe7df-0497-42eb-b334-37126ebe5269/tp10-codeigniter.png#w=1280&h=930) |
+| ![Versión MVC](docs/capturas/tp10-mvc.png) | ![CodeIgniter 4](docs/capturas/tp10-codeigniter.png) |
 
 ## Flujo de trabajo con Git
 
