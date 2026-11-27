@@ -1,4 +1,4 @@
--- Etapa 5: consultas de reparacion y pedidos de presupuesto
+-- Consultas de reparacion y pedidos de presupuesto
 -- Ejecutar una sola vez (base mi_proyecto_web)
 
 USE mi_proyecto_web;

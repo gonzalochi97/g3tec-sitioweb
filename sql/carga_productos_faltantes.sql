@@ -1,4 +1,4 @@
--- Carga los 5 productos de la etapa 4 que no entraron porque faltaban sus categorias
+-- Carga los productos que faltaban porque no existian sus categorias
 -- Se puede ejecutar una sola vez (no repite productos ni categorias)
 
 USE mi_proyecto_web;

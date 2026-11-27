@@ -1,4 +1,4 @@
--- Etapa 4: precio mayorista, precio de oferta y productos del catalogo
+-- Precio mayorista, precio de oferta y productos del catalogo
 -- Ejecutar una sola vez en phpMyAdmin (base mi_proyecto_web, pestaña SQL)
 
 USE mi_proyecto_web;

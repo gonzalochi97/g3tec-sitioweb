@@ -1,4 +1,4 @@
--- Etapa 3: categorias del sitio (sin repetidas)
+-- Categorias del sitio (sin repetidas)
 -- Ejecutar una sola vez en phpMyAdmin (base mi_proyecto_web, pestaña Importar o SQL)
 
 USE mi_proyecto_web;

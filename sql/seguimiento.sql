@@ -1,4 +1,4 @@
--- Etapa 7: seguimiento de pedidos y de reparaciones
+-- Seguimiento de pedidos y de reparaciones
 -- Ejecutar una sola vez (base mi_proyecto_web)
 
 USE mi_proyecto_web;
