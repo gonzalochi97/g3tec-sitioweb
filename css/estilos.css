@@ -293,12 +293,20 @@ article[id^="producto-"] {
   scroll-margin-top: 170px;
 }
 
-.prod-img img,
 .ico img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: inherit;
+}
+
+.prod-img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  object-fit: contain;
 }
 
 .ico:has(img) {
@@ -307,6 +315,7 @@ article[id^="producto-"] {
 }
 
 .prod-img:has(img) {
+  position: relative;
   background: #fff;
   overflow: hidden;
 }
