@@ -29,7 +29,14 @@ $detalle = $pdo->prepare("SELECT detalle_pedidos.cantidad, detalle_pedidos.preci
                           INNER JOIN productos ON detalle_pedidos.id_producto = productos.id_producto
                           WHERE detalle_pedidos.id_pedido = :id");
 
-$colores = ['pendiente' => 'text-bg-warning', 'aprobado' => 'text-bg-success', 'rechazado' => 'text-bg-secondary'];
+$colores = [
+    'pendiente' => 'text-bg-warning',
+    'aprobado' => 'text-bg-success',
+    'rechazado' => 'text-bg-secondary',
+    'en preparacion' => 'text-bg-info',
+    'enviado' => 'text-bg-info',
+    'entregado' => 'text-bg-success',
+];
 
 $raiz = '../';
 $titulo_pagina = 'Panel - Pedidos especiales';
