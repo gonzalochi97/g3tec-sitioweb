@@ -39,55 +39,22 @@ require_once 'includes/header.php';
           </div>
         </div>
         <div class="col-lg-7">
-          <form class="g3-card p-4 row g-3" novalidate data-demo>
-            <div class="col-12">
-              <label for="tipo" class="form-label">Tipo de consulta</label
-              ><select class="form-select" id="tipo" name="tipo" required>
-                <option>Reparación</option>
-                <option>Presupuesto</option>
-                <option>Otro</option>
-              </select>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <a href="consulta_reparacion.php" class="g3-card card-hover p-4 h-100 d-block text-reset text-decoration-none">
+                <i class="bi bi-tools fs-3 text-neon" aria-hidden="true"></i>
+                <h2 class="h5 fw-bold mt-2">Consulta de reparación</h2>
+                <p class="text-secondary small mb-0">Contanos qué le pasa a tu equipo y te pasamos un diagnóstico estimado.</p>
+              </a>
             </div>
             <div class="col-md-6">
-              <label for="snombre" class="form-label">Nombre</label
-              ><input
-                type="text"
-                class="form-control"
-                id="snombre"
-                name="snombre"
-                placeholder="Juan Pérez"
-                autocomplete="name"
-                required
-              />
+              <a href="presupuesto.php" class="g3-card card-hover p-4 h-100 d-block text-reset text-decoration-none">
+                <i class="bi bi-file-earmark-text fs-3 text-neon" aria-hidden="true"></i>
+                <h2 class="h5 fw-bold mt-2">Pedir presupuesto</h2>
+                <p class="text-secondary small mb-0">Cotizaciones para compras grandes, oficinas y licitaciones.</p>
+              </a>
             </div>
-            <div class="col-md-6">
-              <label for="scontacto" class="form-label">Email o WhatsApp</label
-              ><input
-                type="text"
-                class="form-control"
-                id="scontacto"
-                name="scontacto"
-                placeholder="tu@email.com"
-                required
-              />
-            </div>
-            <div class="col-12">
-              <label for="mensaje" class="form-label">Mensaje</label
-              ><textarea
-                class="form-control"
-                id="mensaje"
-                rows="4"
-                placeholder="Contanos qué necesitás…"
-                required
-              ></textarea>
-            </div>
-            <div class="col-12">
-              <button class="btn btn-neon" type="submit">Enviar consulta</button>
-              <div class="alert alert-success d-none mt-3" role="status" data-ok>
-                ¡Consulta enviada! Te respondemos en menos de 24 h.
-              </div>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     </main>
