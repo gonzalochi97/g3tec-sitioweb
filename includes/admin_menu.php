@@ -7,6 +7,8 @@ if ($pagina_admin == 'crear.php' || $pagina_admin == 'editar.php') {
     $pagina_admin = 'index.php';
 }
 
+$no_leidos = $pdo->query("SELECT COUNT(*) FROM mensajes WHERE leido = 0")->fetchColumn();
+
 $menu_admin = [
     'index.php' => 'Productos',
     'categorias.php' => 'Categorías',
@@ -14,6 +16,7 @@ $menu_admin = [
     'solicitudes.php' => 'Solicitudes mayoristas',
     'pedidos.php' => 'Pedidos',
     'consultas.php' => 'Consultas',
+    'mensajes.php' => 'Mensajes',
     'pedidos_especiales.php' => 'Pedidos especiales',
     'busqueda.php' => 'Buscar',
 ];
@@ -22,7 +25,10 @@ $menu_admin = [
       <ul class="nav nav-pills gap-2 mb-4">
         <?php foreach ($menu_admin as $archivo => $texto): ?>
           <li class="nav-item">
-            <a class="btn <?= $archivo == $pagina_admin ? 'btn-neon' : 'btn-outline-neon' ?>" href="<?= $archivo ?>"><?= $texto ?></a>
+            <a class="btn <?= $archivo == $pagina_admin ? 'btn-neon' : 'btn-outline-neon' ?>" href="<?= $archivo ?>"><?= $texto ?>
+              <?php if ($archivo == 'mensajes.php' && $no_leidos > 0): ?>
+                <span class="badge rounded-pill text-bg-danger"><?= $no_leidos ?></span>
+              <?php endif; ?></a>
           </li>
         <?php endforeach; ?>
         <li class="nav-item ms-lg-auto">
