@@ -2,6 +2,8 @@
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
 require_once '../includes/csrf.php';
+require_once '../includes/carrito.php';
+require_once '../includes/imagen_producto.php';
 
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nombre")->fetchAll();
 
@@ -13,11 +15,17 @@ $producto = [
     'precio_oferta' => '',
     'stock' => '',
     'id_categoria' => '',
+    'imagen' => '',
 ];
+$error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     verificar_csrf();
 
+    $error = error_imagen($_FILES['imagen'] ?? null);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $error == '') {
     $sql = "INSERT INTO productos
             (nombre, descripcion, precio, precio_mayorista, precio_oferta, stock, id_categoria)
             VALUES
@@ -35,8 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':id_categoria' => $_POST['id_categoria']
     ]);
 
+    guardar_imagen($pdo, $_FILES['imagen'], $pdo->lastInsertId());
+
     header('Location: index.php?ok=creado');
     exit;
+}
+
+// Si la imagen no es valida, se vuelve a mostrar lo que se habia escrito
+if ($error != '') {
+    $producto = array_merge($producto, $_POST);
 }
 
 $raiz = '../';
@@ -48,7 +63,7 @@ require_once '../includes/header.php';
       <h1 class="display-6 fw-bold">Agregar producto</h1>
       <div class="row">
         <div class="col-lg-8">
-          <form class="g3-card p-4 row g-3" method="POST">
+          <form class="g3-card p-4 row g-3" method="POST" enctype="multipart/form-data">
             <?= campo_csrf() ?>
 <?php require_once '../includes/form_producto.php'; ?>
             <div class="col-12 d-flex gap-2">

@@ -4,6 +4,7 @@ session_start();
 require_once 'config/conexion.php';
 require_once 'includes/csrf.php';
 require_once 'includes/carrito.php';
+require_once 'includes/imagen_producto.php';
 
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
@@ -108,7 +109,7 @@ require_once 'includes/header.php';
               <?php foreach ($items as $item): ?>
                 <?php $producto = $item['producto']; ?>
                 <li class="list-group-item bg-transparent d-flex align-items-center gap-3 py-3 flex-wrap">
-                  <span class="ico flex-shrink-0"><i class="bi <?= icono_categoria($producto['categoria']) ?>" aria-hidden="true"></i></span>
+                  <span class="ico flex-shrink-0"><?= imagen_producto($producto) ?></span>
                   <div class="flex-grow-1">
                     <h2 class="h6 fw-semibold mb-0"><?= htmlspecialchars($producto['nombre']) ?></h2>
                     <p class="small text-secondary mb-0">

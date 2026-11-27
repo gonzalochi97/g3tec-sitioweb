@@ -1,9 +1,10 @@
 <?php
 // Tarjeta de un producto del catalogo. Necesita $producto, $filtros y $es_mayorista
+require_once __DIR__ . '/imagen_producto.php';
 ?>
             <div class="col">
               <article id="producto-<?= $producto['id_producto'] ?>" class="card h-100 card-hover p-3">
-                <div class="prod-img mb-3"><i class="bi <?= icono_categoria($producto['categoria']) ?>" aria-hidden="true"></i></div>
+                <div class="prod-img mb-3"><?= imagen_producto($producto) ?></div>
                 <p class="small text-secondary mb-1"><?= htmlspecialchars($producto['categoria']) ?></p>
                 <h2 class="h6 fw-semibold"><?= htmlspecialchars($producto['nombre']) ?></h2>
                 <?php if (tiene_oferta($producto)): ?>

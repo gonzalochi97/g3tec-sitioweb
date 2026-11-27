@@ -2,12 +2,18 @@
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
 require_once '../includes/csrf.php';
+require_once '../includes/carrito.php';
+require_once '../includes/imagen_producto.php';
 
 $id = $_GET['id'];
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     verificar_csrf();
+    $error = error_imagen($_FILES['imagen'] ?? null);
+}
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $error == '') {
     $sql = "UPDATE productos
             SET nombre = :nombre,
                 descripcion = :descripcion,
@@ -31,6 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':id' => $id
     ]);
 
+    if (isset($_POST['quitar_imagen'])) {
+        borrar_imagen($pdo, $id);
+    }
+    guardar_imagen($pdo, $_FILES['imagen'], $id);
+
     header("Location: index.php?ok=editado");
     exit;
 }
@@ -46,6 +57,10 @@ if (!$producto) {
     exit;
 }
 
+if ($error != '') {
+    $producto = array_merge($producto, $_POST);
+}
+
 $categorias = $pdo->query("SELECT * FROM categorias ORDER BY nombre")->fetchAll();
 
 $raiz = '../';
@@ -57,7 +72,7 @@ require_once '../includes/header.php';
       <h1 class="display-6 fw-bold">Editar producto</h1>
       <div class="row">
         <div class="col-lg-8">
-          <form class="g3-card p-4 row g-3" method="POST">
+          <form class="g3-card p-4 row g-3" method="POST" enctype="multipart/form-data">
             <?= campo_csrf() ?>
 <?php require_once '../includes/form_producto.php'; ?>
             <div class="col-12 d-flex gap-2">
