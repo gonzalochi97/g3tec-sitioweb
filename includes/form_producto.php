@@ -32,3 +32,15 @@
               <input type="number" class="form-control" id="stock" name="stock" min="0"
                 value="<?= htmlspecialchars($producto['stock']) ?>" required />
             </div>
+            <div class="col-md-6">
+              <label for="precio_mayorista" class="form-label">Precio mayorista ($)</label>
+              <input type="number" class="form-control" id="precio_mayorista" name="precio_mayorista" min="0" step="0.01"
+                value="<?= htmlspecialchars($producto['precio_mayorista'] ?? '') ?>" />
+              <div class="form-text">Se aplica desde 10 unidades.</div>
+            </div>
+            <div class="col-md-6">
+              <label for="precio_oferta" class="form-label">Precio de oferta ($)</label>
+              <input type="number" class="form-control" id="precio_oferta" name="precio_oferta" min="0" step="0.01"
+                value="<?= htmlspecialchars($producto['precio_oferta'] ?? '') ?>" />
+              <div class="form-text">Opcional. Dejalo vacío si el producto no está en oferta.</div>
+            </div>

@@ -10,6 +10,8 @@ if (!isset($raiz)) {
     $raiz = '';
 }
 
+$cantidad_carrito = array_sum($_SESSION['carrito'] ?? []);
+
 if (!isset($titulo_pagina)) {
     $titulo_pagina = 'Inicio';
 }
@@ -61,7 +63,7 @@ if (!isset($descripcion_pagina)) {
         <a href="<?= $raiz ?>carrito.php" class="btn btn-outline-neon d-flex align-items-center gap-2"
           ><i class="bi bi-cart3" aria-hidden="true"></i> Tu carrito
           <span class="badge rounded-pill badge-neon"
-            >3<span class="visually-hidden"> productos</span></span
+            ><?= $cantidad_carrito ?><span class="visually-hidden"> productos</span></span
           ></a
         >
         <form

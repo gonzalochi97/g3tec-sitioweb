@@ -32,9 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['usuario_nombre'] = $usuario['nombre'];
         $_SESSION['rol'] = $usuario['id_rol'];
 
-        // El administrador va al panel y el cliente a su cuenta
+        // El administrador va al panel, el que tiene carrito a la compra y el resto a su cuenta
         if ($usuario['id_rol'] == 1) {
             header('Location: ../admin/index.php');
+        } elseif (!empty($_SESSION['carrito'])) {
+            header('Location: ../compra.php');
         } else {
             header('Location: ../cuenta.php');
         }

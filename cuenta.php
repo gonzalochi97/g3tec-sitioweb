@@ -23,6 +23,15 @@ $stmt = $pdo->prepare("SELECT estado FROM solicitudes_mayoristas
 $stmt->execute([':id' => $_SESSION['usuario_id']]);
 $solicitud = $stmt->fetch();
 
+$stmt = $pdo->prepare("SELECT pedidos.id_pedido, pedidos.fecha_pedido, pedidos.total, SUM(detalle_pedidos.cantidad) AS unidades
+                       FROM pedidos
+                       INNER JOIN detalle_pedidos ON pedidos.id_pedido = detalle_pedidos.id_pedido
+                       WHERE pedidos.id_usuario = :id
+                       GROUP BY pedidos.id_pedido
+                       ORDER BY pedidos.fecha_pedido DESC");
+$stmt->execute([':id' => $_SESSION['usuario_id']]);
+$pedidos = $stmt->fetchAll();
+
 $titulo_pagina = "Mi cuenta";
 $descripcion_pagina = "Datos de tu cuenta en G3 Tec.";
 require_once 'includes/header.php';
@@ -76,6 +85,35 @@ require_once 'includes/header.php';
             <a class="btn btn-outline-secondary" href="auth/logout.php">Cerrar sesión</a>
           </div>
         </div>
+      </div>
+      <div class="g3-card p-4 mt-4">
+        <h2 class="h4 fw-bold">Mis pedidos</h2>
+        <?php if (count($pedidos) == 0): ?>
+          <p class="text-secondary mb-0">Todavía no hiciste pedidos.</p>
+        <?php else: ?>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>N.º</th>
+                  <th>Fecha</th>
+                  <th class="text-end">Unidades</th>
+                  <th class="text-end">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($pedidos as $pedido): ?>
+                  <tr>
+                    <td><?= $pedido['id_pedido'] ?></td>
+                    <td><?= date('d/m/Y H:i', strtotime($pedido['fecha_pedido'])) ?></td>
+                    <td class="text-end"><?= $pedido['unidades'] ?></td>
+                    <td class="text-end">$ <?= number_format($pedido['total'], 0, ',', '.') ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        <?php endif; ?>
       </div>
     </main>
 <?php require_once 'includes/footer.php'; ?>

@@ -38,6 +38,7 @@ require_once '../includes/header.php';
               <th>Nombre</th>
               <th>Categoría</th>
               <th class="text-end">Precio</th>
+              <th class="text-end">Oferta</th>
               <th class="text-end">Stock</th>
               <th class="text-end">Acciones</th>
             </tr>
@@ -49,6 +50,7 @@ require_once '../includes/header.php';
                 <td><?= htmlspecialchars($producto['nombre']) ?></td>
                 <td><?= htmlspecialchars($producto['categoria'] ?? '-') ?></td>
                 <td class="text-end">$ <?= number_format($producto['precio'], 0, ',', '.') ?></td>
+                <td class="text-end"><?= $producto['precio_oferta'] !== null ? '$ ' . number_format($producto['precio_oferta'], 0, ',', '.') : '-' ?></td>
                 <td class="text-end"><?= htmlspecialchars($producto['stock']) ?></td>
                 <td class="text-end">
                   <a class="btn btn-sm btn-outline-neon" href="editar.php?id=<?= $producto['id_producto'] ?>">Editar</a>
