@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             SET nombre = :nombre,
                 descripcion = :descripcion,
                 precio = :precio,
+                precio_mayorista = :precio_mayorista,
+                precio_oferta = :precio_oferta,
                 stock = :stock,
                 id_categoria = :id_categoria
             WHERE id_producto = :id";
@@ -20,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':nombre' => trim($_POST['nombre']),
         ':descripcion' => trim($_POST['descripcion']),
         ':precio' => $_POST['precio'],
+        ':precio_mayorista' => $_POST['precio_mayorista'] == '' ? null : $_POST['precio_mayorista'],
+        ':precio_oferta' => $_POST['precio_oferta'] == '' ? null : $_POST['precio_oferta'],
         ':stock' => $_POST['stock'],
         ':id_categoria' => $_POST['id_categoria'],
         ':id' => $id
