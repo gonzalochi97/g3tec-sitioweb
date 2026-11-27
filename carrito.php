@@ -13,13 +13,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $accion = $_POST['accion'] ?? '';
     $id = (int) ($_POST['id_producto'] ?? 0);
 
-    $stmt = $pdo->prepare("SELECT stock FROM productos WHERE id_producto = :id");
+    $stmt = $pdo->prepare("SELECT nombre, stock FROM productos WHERE id_producto = :id");
     $stmt->execute([':id' => $id]);
     $producto = $stmt->fetch();
 
-    if ($accion == 'agregar' && $producto && $producto['stock'] > 0) {
-        $cantidad = ($_SESSION['carrito'][$id] ?? 0) + 1;
-        $_SESSION['carrito'][$id] = min($cantidad, $producto['stock']);
+    // Desde el catalogo: suma 1 (o la cantidad elegida si es mayorista) y vuelve al catalogo
+    if ($accion == 'agregar') {
+        $sumar = 1;
+        if (isset($_SESSION['rol']) && $_SESSION['rol'] == 3) {
+            $sumar = max(1, (int) ($_POST['cantidad'] ?? 1));
+        }
+
+        if ($producto && $producto['stock'] > 0) {
+            $en_carrito = $_SESSION['carrito'][$id] ?? 0;
+            $cantidad = min($en_carrito + $sumar, $producto['stock']);
+            $_SESSION['carrito'][$id] = $cantidad;
+
+            if ($cantidad == $en_carrito) {
+                $_SESSION['aviso'] = 'Ya tenés en el carrito todo el stock disponible de ' . $producto['nombre'] . '.';
+            } else {
+                $_SESSION['aviso'] = 'Agregaste ' . $producto['nombre'] . ' al carrito (' . $cantidad . ' en total).';
+            }
+        }
+
+        parse_str($_POST['volver'] ?? '', $filtros);
+        header('Location: catalogo.php?' . http_build_query($filtros) . '#producto-' . $id);
+        exit;
     }
 
     if ($accion == 'actualizar' && $producto) {
@@ -88,6 +107,7 @@ require_once 'includes/header.php';
                         · oferta
                       <?php endif; ?>
                     </p>
+                    <p class="small text-secondary mb-0">Stock disponible: <?= $producto['stock'] ?> u.</p>
                   </div>
                   <form method="POST" action="carrito.php" class="d-flex gap-2">
                     <input type="hidden" name="accion" value="actualizar" />

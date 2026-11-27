@@ -16,6 +16,10 @@
     root.setAttribute("data-bs-theme", next);
     localStorage.setItem("g3-tema", next);
     sync();
+
+    // El aviso de "agregado al carrito" se oculta solo
+    const aviso = document.querySelector(".aviso-flotante");
+    if (aviso) setTimeout(() => aviso.remove(), 3000);
   });
   sync();
 

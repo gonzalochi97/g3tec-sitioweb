@@ -270,3 +270,22 @@ a:focus-visible {
 .text-secondary {
   color: var(--bs-secondary-color) !important;
 }
+.list-group-item.filtro.active {
+  color: var(--g3-neon);
+  font-weight: 600;
+  border-color: var(--bs-list-group-border-color);
+}
+.filtro-ofertas {
+  color: var(--g3-neon);
+  font-weight: 600;
+}
+.aviso-flotante {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1080;
+}
+article[id^="producto-"] {
+  scroll-margin-top: 170px;
+}

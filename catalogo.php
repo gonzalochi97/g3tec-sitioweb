@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once 'config/conexion.php';
 require_once 'includes/carrito.php';
 
@@ -44,15 +46,21 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute($parametros);
 $productos = $stmt->fetchAll();
 
-// La seccion Ofertas se muestra arriba cuando no hay filtros
-$ofertas = [];
-if ($q == '' && $id_categoria == 0 && !$solo_ofertas) {
-    foreach ($productos as $producto) {
-        if (tiene_oferta($producto)) {
-            $ofertas[] = $producto;
-        }
-    }
-}
+$total_ofertas = $pdo->query("SELECT COUNT(*) FROM productos
+                              WHERE precio_oferta IS NOT NULL AND precio_oferta < precio")->fetchColumn();
+
+// Filtros actuales, para volver al mismo lugar despues de agregar al carrito
+$filtros = http_build_query(array_filter([
+    'q' => $q,
+    'categoria' => $id_categoria,
+    'ofertas' => $solo_ofertas ? 1 : 0,
+    'orden' => $orden,
+]));
+
+$es_mayorista = isset($_SESSION['rol']) && $_SESSION['rol'] == 3;
+
+$aviso = $_SESSION['aviso'] ?? '';
+unset($_SESSION['aviso']);
 
 $titulo_pagina = "Catálogo";
 $descripcion_pagina = "Catálogo de insumos informáticos, tecnología, electro, cargadores y audio con precios mayoristas.";
@@ -72,15 +80,8 @@ require_once 'includes/header.php';
         Valores en pesos argentinos (ARS).
       </p>
 
-      <?php if (count($ofertas) > 0): ?>
-        <section id="ofertas" class="mb-4" aria-labelledby="titulo-ofertas">
-          <h2 id="titulo-ofertas" class="h4 fw-bold"><i class="bi bi-tag" aria-hidden="true"></i> Ofertas</h2>
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
-            <?php foreach ($ofertas as $producto): ?>
-              <?php require 'includes/tarjeta_producto.php'; ?>
-            <?php endforeach; ?>
-          </div>
-        </section>
+      <?php if ($aviso != ''): ?>
+        <div class="alert alert-success aviso-flotante shadow" role="status"><?= htmlspecialchars($aviso) ?></div>
       <?php endif; ?>
 
       <div class="row g-4 mt-1">
@@ -89,12 +90,15 @@ require_once 'includes/header.php';
             <h2 class="h6 fw-bold">Categorías</h2>
             <div class="list-group list-group-flush small">
               <a href="catalogo.php"
-                class="list-group-item list-group-item-action bg-transparent <?= $id_categoria == 0 && !$solo_ofertas ? 'active' : '' ?>">Todos</a>
+                class="list-group-item list-group-item-action bg-transparent filtro <?= $id_categoria == 0 && !$solo_ofertas ? 'active' : '' ?>">Todos</a>
               <a href="catalogo.php?ofertas=1"
-                class="list-group-item list-group-item-action bg-transparent <?= $solo_ofertas ? 'active' : '' ?>">Ofertas</a>
+                class="list-group-item list-group-item-action bg-transparent filtro filtro-ofertas d-flex justify-content-between align-items-center <?= $solo_ofertas ? 'active' : '' ?>">
+                <span><i class="bi bi-tag-fill" aria-hidden="true"></i> Ofertas</span>
+                <span class="badge rounded-pill badge-neon"><?= $total_ofertas ?></span>
+              </a>
               <?php foreach ($categorias as $categoria): ?>
                 <a href="catalogo.php?categoria=<?= $categoria['id_categoria'] ?>"
-                  class="list-group-item list-group-item-action bg-transparent <?= $categoria['id_categoria'] == $id_categoria ? 'active' : '' ?>">
+                  class="list-group-item list-group-item-action bg-transparent filtro <?= $categoria['id_categoria'] == $id_categoria ? 'active' : '' ?>">
                   <?= htmlspecialchars($categoria['nombre']) ?>
                 </a>
               <?php endforeach; ?>
