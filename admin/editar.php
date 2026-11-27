@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $error == '') {
     if (isset($_POST['quitar_imagen'])) {
         borrar_imagen($pdo, $id);
     }
-    guardar_imagen($pdo, $_FILES['imagen'], $id);
+    guardar_imagen($pdo, $_FILES['imagen'] ?? null, $id);
 
     header("Location: index.php?ok=editado");
     exit;

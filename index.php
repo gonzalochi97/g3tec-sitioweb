@@ -1,4 +1,23 @@
 <?php
+session_start();
+
+require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
+require_once 'includes/carrito.php';
+
+// Los 4 productos con mas unidades vendidas
+$sql = "SELECT productos.*, categorias.nombre AS categoria,
+               (SELECT COALESCE(SUM(cantidad), 0) FROM detalle_pedidos
+                WHERE detalle_pedidos.id_producto = productos.id_producto) AS vendidos
+        FROM productos
+        LEFT JOIN categorias ON productos.id_categoria = categorias.id_categoria
+        ORDER BY vendidos DESC, productos.nombre
+        LIMIT 4";
+$productos = $pdo->query($sql)->fetchAll();
+
+$filtros = '';
+$es_mayorista = isset($_SESSION['rol']) && $_SESSION['rol'] == 3;
+
 $titulo_pagina = "Inicio";
 $descripcion_pagina = "Mayorista de insumos informáticos, tecnología y electro en Salta. Comprá por mayor y por menor.";
 require_once 'includes/header.php';
@@ -103,76 +122,9 @@ require_once 'includes/header.php';
           argentinos (ARS).
         </p>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
-          <div class="col">
-            <article class="card h-100 card-hover p-3">
-              <div class="prod-img mb-3"><i class="bi bi-usb-c" aria-hidden="true"></i></div>
-              <p class="small text-secondary mb-1">Insumos informáticos</p>
-              <h3 class="h6 fw-semibold">Cable USB-C a USB-C 60W 1 m</h3>
-              <p class="price mb-0">$ 6.900</p>
-              <p class="small text-secondary mb-2">Precio por unidad · ARS</p>
-              <p class="wholesale mb-3">Mayorista desde 10 u: <strong>$ 5.900</strong></p>
-              <button
-                type="button"
-                class="btn btn-neon btn-sm mt-auto"
-                aria-label="Agregar Cable USB-C a USB-C 60W 1 m al carrito"
-              >
-                <i class="bi bi-cart-plus" aria-hidden="true"></i> Agregar
-              </button>
-            </article>
-          </div>
-          <div class="col">
-            <article class="card h-100 card-hover p-3">
-              <div class="prod-img mb-3"><i class="bi bi-device-ssd" aria-hidden="true"></i></div>
-              <p class="small text-secondary mb-1">Tecnología</p>
-              <h3 class="h6 fw-semibold">Disco SSD 480 GB</h3>
-              <p class="price mb-0">$ 42.900</p>
-              <p class="small text-secondary mb-2">Precio por unidad · ARS</p>
-              <p class="wholesale mb-3">Mayorista desde 10 u: <strong>$ 36.500</strong></p>
-              <button
-                type="button"
-                class="btn btn-neon btn-sm mt-auto"
-                aria-label="Agregar Disco SSD 480 GB al carrito"
-              >
-                <i class="bi bi-cart-plus" aria-hidden="true"></i> Agregar
-              </button>
-            </article>
-          </div>
-          <div class="col">
-            <article class="card h-100 card-hover p-3">
-              <div class="prod-img mb-3"><i class="bi bi-fire" aria-hidden="true"></i></div>
-              <p class="small text-secondary mb-1">Electro</p>
-              <h3 class="h6 fw-semibold">Freidora de aire 4 L</h3>
-              <p class="price mb-0">$ 129.900</p>
-              <p class="small text-secondary mb-2">Precio por unidad · ARS</p>
-              <p class="wholesale mb-3">Mayorista desde 10 u: <strong>$ 110.400</strong></p>
-              <button
-                type="button"
-                class="btn btn-neon btn-sm mt-auto"
-                aria-label="Agregar Freidora de aire 4 L al carrito"
-              >
-                <i class="bi bi-cart-plus" aria-hidden="true"></i> Agregar
-              </button>
-            </article>
-          </div>
-          <div class="col">
-            <article class="card h-100 card-hover p-3">
-              <div class="prod-img mb-3">
-                <i class="bi bi-lightning-charge" aria-hidden="true"></i>
-              </div>
-              <p class="small text-secondary mb-1">Cargadores y fuentes</p>
-              <h3 class="h6 fw-semibold">Cargador GaN 65W</h3>
-              <p class="price mb-0">$ 39.900</p>
-              <p class="small text-secondary mb-2">Precio por unidad · ARS</p>
-              <p class="wholesale mb-3">Mayorista desde 10 u: <strong>$ 33.900</strong></p>
-              <button
-                type="button"
-                class="btn btn-neon btn-sm mt-auto"
-                aria-label="Agregar Cargador GaN 65W al carrito"
-              >
-                <i class="bi bi-cart-plus" aria-hidden="true"></i> Agregar
-              </button>
-            </article>
-          </div>
+          <?php foreach ($productos as $producto): ?>
+            <?php require 'includes/tarjeta_producto.php'; ?>
+          <?php endforeach; ?>
         </div>
       </section>
       <section class="row g-3">

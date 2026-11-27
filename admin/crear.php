@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $error == '') {
         ':id_categoria' => $_POST['id_categoria']
     ]);
 
-    guardar_imagen($pdo, $_FILES['imagen'], $pdo->lastInsertId());
+    guardar_imagen($pdo, $_FILES['imagen'] ?? null, $pdo->lastInsertId());
 
     header('Location: index.php?ok=creado');
     exit;
