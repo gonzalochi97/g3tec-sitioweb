@@ -12,6 +12,7 @@ $menu_admin = [
     'categorias.php' => 'Categorías',
     'usuarios.php' => 'Usuarios',
     'solicitudes.php' => 'Solicitudes mayoristas',
+    'pedidos.php' => 'Pedidos',
     'consultas.php' => 'Consultas',
     'pedidos_especiales.php' => 'Pedidos especiales',
     'busqueda.php' => 'Buscar',

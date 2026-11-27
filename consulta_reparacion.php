@@ -3,6 +3,7 @@ session_start();
 
 require_once 'config/conexion.php';
 require_once 'includes/csrf.php';
+require_once 'includes/estados.php';
 
 $equipos = ['Notebook', 'PC', 'Fuente / cargador', 'Otro'];
 
@@ -79,7 +80,10 @@ require_once 'includes/header.php';
           <?php if ($enviada): ?>
             <div class="g3-card p-4">
               <h2 class="h5 fw-bold">¡Consulta enviada!</h2>
-              <p class="mb-3">Tu número de consulta es el <strong>#<?= (int) $_GET['enviada'] ?></strong>. Te respondemos en menos de 24 h.</p>
+              <p class="mb-3">
+                Tu número de orden es <strong><?= numero_orden((int) $_GET['enviada']) ?></strong>. Te respondemos en menos de 24 h.
+                Con ese número y tu contacto podés ver el estado en <a href="seguimiento.php">Seguimiento</a>.
+              </p>
               <a class="btn btn-neon" href="index.php">Volver al inicio</a>
             </div>
           <?php else: ?>

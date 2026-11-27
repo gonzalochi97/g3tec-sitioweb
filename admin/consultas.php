@@ -2,15 +2,16 @@
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
 require_once '../includes/csrf.php';
+require_once '../includes/estados.php';
 
-// Marcar una consulta o un presupuesto como respondido
+// Cambiar el estado de una reparacion o marcar un presupuesto como respondido
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     verificar_csrf();
     $id = (int) $_POST['id'];
 
-    if ($_POST['tipo'] == 'consulta') {
-        $stmt = $pdo->prepare("UPDATE consultas_reparacion SET estado = 'respondida' WHERE id_consulta = :id");
-        $stmt->execute([':id' => $id]);
+    if ($_POST['tipo'] == 'consulta' && isset($pasos_reparacion[$_POST['estado']])) {
+        $stmt = $pdo->prepare("UPDATE consultas_reparacion SET estado = :estado WHERE id_consulta = :id");
+        $stmt->execute([':estado' => $_POST['estado'], ':id' => $id]);
     }
     if ($_POST['tipo'] == 'presupuesto') {
         $stmt = $pdo->prepare("UPDATE presupuestos SET estado = 'respondido' WHERE id_presupuesto = :id");
@@ -22,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $consultas = $pdo->query("SELECT * FROM consultas_reparacion
-                          ORDER BY estado = 'pendiente' DESC, created_at DESC")->fetchAll();
+                          ORDER BY estado = 'entregado', created_at DESC")->fetchAll();
 $presupuestos = $pdo->query("SELECT * FROM presupuestos
                              ORDER BY estado = 'pendiente' DESC, created_at DESC")->fetchAll();
 
@@ -34,7 +35,7 @@ require_once '../includes/header.php';
 <?php require_once '../includes/admin_menu.php'; ?>
       <h1 class="display-6 fw-bold">Consultas y presupuestos</h1>
 
-      <h2 class="h4 fw-bold mt-4">Consultas de reparación</h2>
+      <h2 class="h4 fw-bold mt-4">Reparaciones (consultas y turnos)</h2>
       <?php if (empty($consultas)): ?>
         <div class="g3-card p-4">Todavía no hay consultas.</div>
       <?php else: ?>
@@ -54,8 +55,13 @@ require_once '../includes/header.php';
             <tbody>
               <?php foreach ($consultas as $consulta): ?>
                 <tr>
-                  <td><?= $consulta['id_consulta'] ?></td>
-                  <td><?= date('d/m/Y', strtotime($consulta['created_at'])) ?></td>
+                  <td class="text-nowrap"><?= numero_orden($consulta['id_consulta']) ?></td>
+                  <td>
+                    <?= date('d/m/Y', strtotime($consulta['created_at'])) ?>
+                    <?php if ($consulta['tipo'] == 'turno'): ?>
+                      <br /><span class="badge badge-neon">Turno <?= $consulta['fecha_turno'] ? date('d/m', strtotime($consulta['fecha_turno'])) : '' ?></span>
+                    <?php endif; ?>
+                  </td>
                   <td>
                     <?= htmlspecialchars($consulta['tipo_equipo']) ?><br />
                     <span class="small text-secondary"><?= htmlspecialchars($consulta['marca'] . ' ' . $consulta['modelo']) ?>
@@ -67,17 +73,20 @@ require_once '../includes/header.php';
                     <span class="small text-secondary"><?= htmlspecialchars($consulta['contacto']) ?></span>
                   </td>
                   <td>
-                    <span class="badge <?= $consulta['estado'] == 'pendiente' ? 'text-bg-warning' : 'text-bg-success' ?>"><?= ucfirst($consulta['estado']) ?></span>
+                    <?= barra_estado($pasos_reparacion, $consulta['estado']) ?>
                   </td>
                   <td class="text-end">
-                    <?php if ($consulta['estado'] == 'pendiente'): ?>
-                      <form method="POST">
-                        <?= campo_csrf() ?>
-                        <input type="hidden" name="tipo" value="consulta" />
-                        <input type="hidden" name="id" value="<?= $consulta['id_consulta'] ?>" />
-                        <button class="btn btn-sm btn-outline-success">Marcar respondida</button>
-                      </form>
-                    <?php endif; ?>
+                    <form method="POST" class="d-flex gap-2 justify-content-end">
+                      <?= campo_csrf() ?>
+                      <input type="hidden" name="tipo" value="consulta" />
+                      <input type="hidden" name="id" value="<?= $consulta['id_consulta'] ?>" />
+                      <select name="estado" class="form-select form-select-sm" style="width: auto" aria-label="Estado de la orden <?= $consulta['id_consulta'] ?>">
+                        <?php foreach ($pasos_reparacion as $clave => $texto): ?>
+                          <option value="<?= $clave ?>" <?= $clave == $consulta['estado'] ? 'selected' : '' ?>><?= $texto ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                      <button class="btn btn-sm btn-outline-neon">Guardar</button>
+                    </form>
                   </td>
                 </tr>
               <?php endforeach; ?>

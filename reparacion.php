@@ -1,4 +1,59 @@
 <?php
+session_start();
+
+require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
+require_once 'includes/estados.php';
+
+$equipos = ['Notebook', 'PC de escritorio', 'All in one'];
+$servicios = ['Diagnóstico completo', 'Limpieza y pasta térmica', 'Upgrade de SSD y RAM',
+              'Formateo y antivirus', 'Pantallas y teclados', 'Armado de PC a medida'];
+$modalidades = ['Lo llevo a la sucursal', 'Retiro a domicilio'];
+
+$errores = [];
+$datos = [
+    'equipo' => 'Notebook', 'servicio' => 'Diagnóstico completo',
+    'modalidad' => 'Lo llevo a la sucursal', 'nombre' => '', 'whatsapp' => '', 'fecha' => '',
+];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificar_csrf();
+
+    foreach ($datos as $campo => $valor) {
+        $datos[$campo] = trim($_POST[$campo] ?? '');
+    }
+
+    if (!in_array($datos['equipo'], $equipos) || !in_array($datos['servicio'], $servicios)
+        || !in_array($datos['modalidad'], $modalidades)) {
+        $errores[] = 'Elegí el equipo, el servicio y la modalidad de la lista.';
+    }
+    if (strlen($datos['nombre']) < 3) {
+        $errores[] = 'Ingresá tu nombre.';
+    }
+    if (!preg_match('/^[0-9 +()-]{8,20}$/', $datos['whatsapp'])) {
+        $errores[] = 'Ingresá un WhatsApp válido.';
+    }
+    if ($datos['fecha'] == '' || strtotime($datos['fecha']) < strtotime(date('Y-m-d'))) {
+        $errores[] = 'Elegí una fecha desde hoy en adelante.';
+    }
+
+    if (empty($errores)) {
+        $stmt = $pdo->prepare("INSERT INTO consultas_reparacion
+                (tipo, tipo_equipo, marca, modelo, falla, nombre, contacto, garantia, fecha_turno)
+                VALUES ('turno', :equipo, '-', '-', :falla, :nombre, :contacto, 0, :fecha)");
+        $stmt->execute([
+            ':equipo' => $datos['equipo'],
+            ':falla' => $datos['servicio'] . ' · ' . $datos['modalidad'],
+            ':nombre' => $datos['nombre'],
+            ':contacto' => $datos['whatsapp'],
+            ':fecha' => $datos['fecha'],
+        ]);
+
+        header('Location: reparacion.php?turno=' . $pdo->lastInsertId() . '#turno');
+        exit;
+    }
+}
+
 $titulo_pagina = "Reparación de PC y notebooks";
 $descripcion_pagina = "Reparación y mantenimiento de PC y notebooks en Salta con garantía de 90 días.";
 require_once 'includes/header.php';
@@ -99,68 +154,68 @@ require_once 'includes/header.php';
           </div>
         </div>
       </div>
-      <h2 class="h3 fw-bold mt-5 mb-3">Pedí tu turno</h2>
-      <form class="g3-card p-4 row g-3" novalidate data-demo>
+      <h2 id="turno" class="h3 fw-bold mt-5 mb-3">Pedí tu turno</h2>
+      <?php if (isset($_GET['turno'])): ?>
+        <div class="g3-card p-4">
+          <h3 class="h5 fw-bold">¡Turno solicitado!</h3>
+          <p class="mb-0">
+            Tu número de orden es <strong><?= numero_orden((int) $_GET['turno']) ?></strong>. Te confirmamos por WhatsApp.
+            Seguí el estado en <a href="seguimiento.php">Seguimiento</a> con ese número y tu WhatsApp.
+          </p>
+        </div>
+      <?php else: ?>
+      <form class="g3-card p-4 row g-3" method="POST" action="reparacion.php#turno">
+        <?= campo_csrf() ?>
+        <?php if (!empty($errores)): ?>
+          <div class="alert alert-danger mb-0" role="alert">
+            <?php foreach ($errores as $error): ?>
+              <div><?= htmlspecialchars($error) ?></div>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
         <div class="col-md-4">
-          <label for="equipo" class="form-label">Equipo</label
-          ><select class="form-select" id="equipo" name="equipo" required>
-            <option>Notebook</option>
-            <option>PC de escritorio</option>
-            <option>All in one</option>
+          <label for="equipo" class="form-label">Equipo</label>
+          <select class="form-select" id="equipo" name="equipo">
+            <?php foreach ($equipos as $opcion): ?>
+              <option <?= $datos['equipo'] == $opcion ? 'selected' : '' ?>><?= $opcion ?></option>
+            <?php endforeach; ?>
           </select>
         </div>
         <div class="col-md-4">
-          <label for="servicio" class="form-label">Servicio</label
-          ><select class="form-select" id="servicio" name="servicio" required>
-            <option>Diagnóstico completo</option>
-            <option>Limpieza y pasta térmica</option>
-            <option>Upgrade de SSD y RAM</option>
-            <option>Formateo y antivirus</option>
-            <option>Pantallas y teclados</option>
-            <option>Armado de PC a medida</option>
+          <label for="servicio" class="form-label">Servicio</label>
+          <select class="form-select" id="servicio" name="servicio">
+            <?php foreach ($servicios as $opcion): ?>
+              <option <?= $datos['servicio'] == $opcion ? 'selected' : '' ?>><?= $opcion ?></option>
+            <?php endforeach; ?>
           </select>
         </div>
         <div class="col-md-4">
-          <label for="fecha" class="form-label">Fecha preferida</label
-          ><input
-            type="date"
-            class="form-control"
-            id="fecha"
-            name="fecha"
-            placeholder=""
-            required
-          />
+          <label for="modalidad" class="form-label">Modalidad</label>
+          <select class="form-select" id="modalidad" name="modalidad">
+            <?php foreach ($modalidades as $opcion): ?>
+              <option <?= $datos['modalidad'] == $opcion ? 'selected' : '' ?>><?= $opcion ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
-        <div class="col-md-6">
-          <label for="tnombre" class="form-label">Nombre</label
-          ><input
-            type="text"
-            class="form-control"
-            id="tnombre"
-            name="tnombre"
-            placeholder="Juan Pérez"
-            autocomplete="name"
-            required
-          />
+        <div class="col-md-4">
+          <label for="tnombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="tnombre" name="nombre" placeholder="Juan Pérez"
+            autocomplete="name" value="<?= htmlspecialchars($datos['nombre']) ?>" required />
         </div>
-        <div class="col-md-6">
-          <label for="twa" class="form-label">WhatsApp</label
-          ><input
-            type="tel"
-            class="form-control"
-            id="twa"
-            name="twa"
-            placeholder="387 400-0000"
-            autocomplete="tel"
-            required
-          />
+        <div class="col-md-4">
+          <label for="twa" class="form-label">WhatsApp</label>
+          <input type="tel" class="form-control" id="twa" name="whatsapp" placeholder="387 400-0000"
+            autocomplete="tel" value="<?= htmlspecialchars($datos['whatsapp']) ?>" required />
+        </div>
+        <div class="col-md-4">
+          <label for="fecha" class="form-label">Fecha preferida</label>
+          <input type="date" class="form-control" id="fecha" name="fecha" min="<?= date('Y-m-d') ?>"
+            value="<?= htmlspecialchars($datos['fecha']) ?>" required />
         </div>
         <div class="col-12">
           <button class="btn btn-neon" type="submit">Solicitar turno</button>
-          <div class="alert alert-success d-none mt-3" role="status" data-ok>
-            ¡Turno solicitado! Te confirmamos por WhatsApp.
-          </div>
         </div>
       </form>
+      <?php endif; ?>
     </main>
 <?php require_once 'includes/footer.php'; ?>

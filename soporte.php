@@ -57,5 +57,25 @@ require_once 'includes/header.php';
           </div>
         </div>
       </div>
+      <div class="g3-card p-4 p-lg-5 mt-5 row g-3 align-items-center mx-0">
+        <div class="col-lg-6">
+          <p class="eyebrow mb-2">Seguimiento</p>
+          <h2 class="h3 fw-bold">Seguí tu orden de servicio</h2>
+          <p class="text-secondary mb-0">Revisión, reparación, garantía y entrega: mirá cómo va tu equipo.</p>
+        </div>
+        <form class="col-lg-6 row g-2 mx-0" method="GET" action="seguimiento.php">
+          <div class="col-sm-4">
+            <label class="visually-hidden" for="snumero">Número de orden</label>
+            <input type="text" class="form-control" id="snumero" name="numero" placeholder="Ej: G3-0001" required />
+          </div>
+          <div class="col-sm-5">
+            <label class="visually-hidden" for="scontacto">Email o teléfono</label>
+            <input type="text" class="form-control" id="scontacto" name="contacto" placeholder="Email o teléfono" required />
+          </div>
+          <div class="col-sm-3">
+            <button type="submit" class="btn btn-neon w-100">Consultar</button>
+          </div>
+        </form>
+      </div>
     </main>
 <?php require_once 'includes/footer.php'; ?>
