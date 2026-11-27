@@ -2,6 +2,7 @@
 session_start();
 
 require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
 require_once 'includes/carrito.php';
 
 if (!isset($_SESSION['carrito'])) {
@@ -9,6 +10,7 @@ if (!isset($_SESSION['carrito'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verificar_csrf();
 
     $accion = $_POST['accion'] ?? '';
     $id = (int) ($_POST['id_producto'] ?? 0);
@@ -125,6 +127,7 @@ require_once 'includes/header.php';
                     <?php endif; ?>
                   </div>
                   <form method="POST" action="carrito.php" class="d-flex gap-2">
+                    <?= campo_csrf() ?>
                     <input type="hidden" name="accion" value="actualizar" />
                     <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>" />
                     <label class="visually-hidden" for="cant<?= $producto['id_producto'] ?>">Cantidad de <?= htmlspecialchars($producto['nombre']) ?></label>
@@ -137,6 +140,7 @@ require_once 'includes/header.php';
                   </form>
                   <strong class="text-nowrap"><?= pesos($item['subtotal']) ?></strong>
                   <form method="POST" action="carrito.php">
+                    <?= campo_csrf() ?>
                     <input type="hidden" name="accion" value="quitar" />
                     <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>" />
                     <button type="submit" class="btn btn-sm btn-outline-danger"
@@ -148,6 +152,7 @@ require_once 'includes/header.php';
               <?php endforeach; ?>
             </ul>
             <form method="POST" action="carrito.php" class="mt-2">
+              <?= campo_csrf() ?>
               <input type="hidden" name="accion" value="vaciar" />
               <button type="submit" class="btn btn-sm btn-outline-secondary">Vaciar carrito</button>
             </form>
