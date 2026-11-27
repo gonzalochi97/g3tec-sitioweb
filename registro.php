@@ -2,6 +2,7 @@
 session_start();
 
 require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
 
 $provincias = ['Salta', 'Jujuy', 'Tucumán', 'Catamarca', 'Santiago del Estero', 'Otra'];
 $rubros = ['Comercio de informática', 'Librería', 'Electrodomésticos', 'Servicio técnico', 'Otro'];
@@ -31,6 +32,7 @@ if ($logueado) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $aviso == '') {
+    verificar_csrf();
 
     foreach ($datos as $campo => $valor) {
         if (isset($_POST[$campo])) {
@@ -140,6 +142,7 @@ require_once 'includes/header.php';
             </div>
           <?php else: ?>
           <form class="g3-card p-4 row g-3" method="POST" action="registro.php">
+            <?= campo_csrf() ?>
             <?php if (!empty($errores)): ?>
               <div class="alert alert-danger mb-0" role="alert">
                 <?php foreach ($errores as $error): ?>

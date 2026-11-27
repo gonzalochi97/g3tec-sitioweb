@@ -27,6 +27,7 @@
                   </p>
                 <?php endif; ?>
                 <form class="mt-auto d-flex gap-2" method="POST" action="carrito.php">
+                  <?= campo_csrf() ?>
                   <input type="hidden" name="accion" value="agregar" />
                   <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>" />
                   <input type="hidden" name="volver" value="<?= htmlspecialchars($filtros) ?>" />

@@ -8,6 +8,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 require_once 'config/conexion.php';
+require_once 'includes/csrf.php';
 require_once 'includes/carrito.php';
 
 $error = '';
@@ -16,6 +17,7 @@ $total = total_carrito($items);
 $es_mayorista = es_mayorista();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($items) > 0) {
+    verificar_csrf();
 
     try {
         $pdo->beginTransaction();
@@ -143,6 +145,7 @@ require_once 'includes/header.php';
           </div>
           <div class="col-lg-4">
             <form class="g3-card p-4" method="POST" action="compra.php">
+              <?= campo_csrf() ?>
               <h2 class="h5 fw-bold">Total a pagar</h2>
               <p class="price"><?= pesos($total) ?></p>
               <p class="small text-secondary">Comprás como <?= htmlspecialchars($_SESSION['usuario_nombre']) ?>. El envío se coordina después.</p>
