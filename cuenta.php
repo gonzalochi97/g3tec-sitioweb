@@ -17,6 +17,12 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([':id' => $_SESSION['usuario_id']]);
 $usuario = $stmt->fetch();
 
+// Ultima solicitud mayorista del usuario (si tiene)
+$stmt = $pdo->prepare("SELECT estado FROM solicitudes_mayoristas
+                       WHERE id_usuario = :id ORDER BY created_at DESC LIMIT 1");
+$stmt->execute([':id' => $_SESSION['usuario_id']]);
+$solicitud = $stmt->fetch();
+
 $titulo_pagina = "Mi cuenta";
 $descripcion_pagina = "Datos de tu cuenta en G3 Tec.";
 require_once 'includes/header.php';
@@ -30,6 +36,11 @@ require_once 'includes/header.php';
       </nav>
       <p class="eyebrow mb-2">Usuario</p>
       <h1 class="display-6 fw-bold">Hola, <?= htmlspecialchars($usuario['nombre']) ?></h1>
+      <?php if (isset($_GET['solicitud'])): ?>
+        <div class="alert alert-success" role="status">
+          Recibimos tu solicitud mayorista. La revisamos en menos de 24 h hábiles.
+        </div>
+      <?php endif; ?>
       <?php if (isset($_GET['error']) && $_GET['error'] == 'sin_permiso'): ?>
         <div class="alert alert-warning" role="alert">Esa sección es solo para administradores.</div>
       <?php endif; ?>
@@ -44,6 +55,10 @@ require_once 'includes/header.php';
               <dd class="col-sm-8"><?= htmlspecialchars($usuario['email']) ?></dd>
               <dt class="col-sm-4">Tipo de cuenta</dt>
               <dd class="col-sm-8"><?= htmlspecialchars($usuario['rol']) ?></dd>
+              <?php if ($solicitud && $usuario['rol'] != 'Mayorista'): ?>
+                <dt class="col-sm-4">Solicitud mayorista</dt>
+                <dd class="col-sm-8"><?= ucfirst($solicitud['estado']) ?></dd>
+              <?php endif; ?>
             </dl>
           </div>
         </div>
@@ -52,6 +67,9 @@ require_once 'includes/header.php';
             <h2 class="h4 fw-bold">Accesos</h2>
             <?php if ($_SESSION['rol'] == 1): ?>
               <a class="btn btn-neon" href="admin/index.php">Ir al panel de administrador</a>
+            <?php endif; ?>
+            <?php if ($usuario['rol'] == 'Cliente' && (!$solicitud || $solicitud['estado'] == 'rechazada')): ?>
+              <a class="btn btn-outline-neon" href="registro.php">Solicitar cuenta mayorista</a>
             <?php endif; ?>
             <a class="btn btn-outline-neon" href="catalogo.php">Ver el catálogo</a>
             <a class="btn btn-outline-neon" href="carrito.php">Ver mi carrito</a>
