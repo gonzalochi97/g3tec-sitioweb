@@ -1,7 +1,10 @@
 <?php
 // Campos del formulario de producto. Lo usan crear.php y editar.php
-// Necesita $producto (array con los datos) y $categorias
+// Necesita $producto (array con los datos), $categorias y $error
 ?>
+            <?php if ($error != ''): ?>
+              <div class="alert alert-danger mb-0" role="alert"><?= $error ?></div>
+            <?php endif; ?>
             <div class="col-md-8">
               <label for="nombre" class="form-label">Nombre</label>
               <input type="text" class="form-control" id="nombre" name="nombre"
@@ -43,4 +46,18 @@
               <input type="number" class="form-control" id="precio_oferta" name="precio_oferta" min="0" step="0.01"
                 value="<?= htmlspecialchars($producto['precio_oferta'] ?? '') ?>" />
               <div class="form-text">Opcional. Dejalo vacío si el producto no está en oferta.</div>
+            </div>
+            <div class="col-12">
+              <label for="imagen" class="form-label">Imagen</label>
+              <div class="d-flex gap-3 align-items-center">
+                <span class="ico flex-shrink-0"><?= imagen_producto($producto, '../') ?></span>
+                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/jpeg,image/png,image/webp" />
+              </div>
+              <div class="form-text">JPG, PNG o WEBP de hasta 2 MB. Si no subís ninguna, se muestra el ícono de la categoría.</div>
+              <?php if (!empty($producto['imagen'])): ?>
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="quitar_imagen" name="quitar_imagen" value="1" />
+                  <label class="form-check-label" for="quitar_imagen">Quitar la imagen actual</label>
+                </div>
+              <?php endif; ?>
             </div>

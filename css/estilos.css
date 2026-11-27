@@ -292,3 +292,30 @@ a:focus-visible {
 article[id^="producto-"] {
   scroll-margin-top: 170px;
 }
+
+.ico img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.prod-img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  object-fit: contain;
+}
+
+.ico:has(img) {
+  overflow: hidden;
+  background: #fff;
+}
+
+.prod-img:has(img) {
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}

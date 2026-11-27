@@ -3,6 +3,8 @@
 require_once '../auth/admin_guard.php';
 require_once '../config/conexion.php';
 require_once '../includes/csrf.php';
+require_once '../includes/carrito.php';
+require_once '../includes/imagen_producto.php';
 
 $sql = "SELECT productos.*, categorias.nombre AS categoria
         FROM productos
@@ -48,7 +50,12 @@ require_once '../includes/header.php';
             <?php foreach ($productos as $producto): ?>
               <tr>
                 <td><?= htmlspecialchars($producto['id_producto']) ?></td>
-                <td><?= htmlspecialchars($producto['nombre']) ?></td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="ico flex-shrink-0"><?= imagen_producto($producto, '../') ?></span>
+                    <?= htmlspecialchars($producto['nombre']) ?>
+                  </div>
+                </td>
                 <td><?= htmlspecialchars($producto['categoria'] ?? '-') ?></td>
                 <td class="text-end">$ <?= number_format($producto['precio'], 0, ',', '.') ?></td>
                 <td class="text-end"><?= $producto['precio_oferta'] !== null ? '$ ' . number_format($producto['precio_oferta'], 0, ',', '.') : '-' ?></td>
